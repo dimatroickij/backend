@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
-public class KafkaConfiguration {
+public class KafkaTopicConfig {
     public static final String NOTIFICATIONS_TOPIC = "notifications";
 
     @Bean

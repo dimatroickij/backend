@@ -1,0 +1,128 @@
+version: '3.4'
+
+services:
+  db-postgres:
+    image: postgres:9.6-alpine
+    container_name: db-postgres
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+
+  zookeeper:
+    image: zookeeper #wurstmeister/zookeeper:3.4.14
+    restart: unless-stopped
+    container_name: zookeeper
+    ports:
+    - 2181:2181
+
+  kafka:
+    env_file:
+      - .env
+    image: wurstmeister/kafka
+    restart: unless-stopped
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_LISTENERS: "${KAFKA_LISTENERS}"
+      KAFKA_ADVERTISED_LISTENERS: "${KAFKA_ADVERTISED_LISTENERS}"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP}"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "${KAFKA_INTER_BROKER_LISTENER_NAME}"
+      KAFKA_BROKER_ID: 1
+      KAFKA_CREATE_TOPICS_SEPARATOR: "$$'\n'"
+      KAFKA_CREATE_TOPICS: |
+        notifications:2:1
+      KAFKA_ZOOKEEPER_CONNECT: "${KAFKA_ZOOKEEPER_CONNECT}"
+    ports:
+      - 9092:9092
+      - 19092:19092
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  config-service:
+    env_file:
+      - .env
+    build: config-service
+    restart: unless-stopped
+    container_name: config-service
+    environment:
+      CONFIG_URL: "${CONFIG_URL}"
+      CONFIG_SERVICE_PASS: "${CONFIG_SERVICE_PASS}"
+      CONFIG_SERVICE_USER: "${CONFIG_SERVICE_USER}"
+      DEF_JAVA_OPTIONS: "${DEF_JAVA_OPTIONS}"
+    ports:
+      - 8888:8888
+    depends_on:
+      - db-postgres
+
+  display-service:
+    env_file:
+      - .env
+    build: display-service
+    restart: unless-stopped
+    container_name: display-service
+    environment:
+      CONFIG_URL: "${CONFIG_URL}"
+      CONFIG_SERVICE_PASS: "${CONFIG_SERVICE_PASS}"
+      CONFIG_SERVICE_USER: "${CONFIG_SERVICE_USER}"
+      DEF_JAVA_OPTIONS: "${DEF_JAVA_OPTIONS}"
+    ports:
+      - 8082:8082
+    depends_on:
+      - db-postgres
+      - config-service
+
+  private-service:
+    env_file:
+      - .env
+    build: private-service
+    restart: unless-stopped
+    container_name: private-service
+    environment:
+      CONFIG_URL: "${CONFIG_URL}"
+      CONFIG_SERVICE_PASS: "${CONFIG_SERVICE_PASS}"
+      CONFIG_SERVICE_USER: "${CONFIG_SERVICE_USER}"
+      DEF_JAVA_OPTIONS: "${DEF_JAVA_OPTIONS}"
+    ports:
+      - 8080:8080
+    depends_on:
+      - db-postgres
+      - config-service
+
+  public-service:
+    env_file:
+      - .env
+    build: public-service
+    restart: unless-stopped
+    container_name: public-service
+    environment:
+      CONFIG_URL: "${CONFIG_URL}"
+      CONFIG_SERVICE_PASS: "${CONFIG_SERVICE_PASS}"
+      CONFIG_SERVICE_USER: "${CONFIG_SERVICE_USER}"
+      DEF_JAVA_OPTIONS: "${DEF_JAVA_OPTIONS}"
+    ports:
+      - 8081:8081
+    depends_on:
+      - db-postgres
+      - config-service
+
+  send-notifications-service:
+    env_file:
+      - .env
+    build: send-notifications-service
+    restart: unless-stopped
+    container_name: send-notifications-service
+    environment:
+      CONFIG_URL: "${CONFIG_URL}"
+      CONFIG_SERVICE_PASS: "${CONFIG_SERVICE_PASS}"
+      CONFIG_SERVICE_USER: "${CONFIG_SERVICE_USER}"
+      DEF_JAVA_OPTIONS: "${DEF_JAVA_OPTIONS}"
+    ports:
+      - 8083:8083
+    depends_on:
+      - db-postgres
+      - config-service

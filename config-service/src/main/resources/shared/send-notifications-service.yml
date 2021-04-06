@@ -1,0 +1,42 @@
+server:
+  port: 8083
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        default_schema: notifications
+  datasource:
+    hikari:
+      maximumPoolSize: 5
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER_URL:localhost:9092}
+    client-id: send-notifications-service
+    consumer:
+      group-id: notifications-consumer-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      properties:
+        spring.json.trusted.packages: "*"
+    listener:
+      ack-mode: record
+
+mail-sender:
+  send-rate: 60000
+  send-to: ${EMAIL_SEND_TO}
+  resend-delay-per-error-in-minute: 1
+  resend-delay-limit: 240

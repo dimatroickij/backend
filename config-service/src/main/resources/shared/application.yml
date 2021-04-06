@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  datasource:
+    url: ${POSTGRES_URL:jdbc:postgresql://127.0.0.1:5432/appointment}
+    initialization-mode: always
+    continue-on-error: false
+    hikari:
+      jdbc-url: ${spring.datasource.url}
+      username: ${POSTGRES_USER:postgres}
+      password: ${POSTGRES_PASSWORD:postgres}
+      driver-class-name: org.postgresql.Driver
+      maximum-pool-size: 4
+      minimum-idle: 1

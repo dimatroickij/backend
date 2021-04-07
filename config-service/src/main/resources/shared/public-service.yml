@@ -21,7 +21,7 @@ spring:
       acks: all
       retries: 0x7fffffff
       compressionType: snappy
-        batchSize: 32768
-        properties:
-          linger.ms: 20
-          max.request.size: 104857600
+      batchSize: 32768
+      properties:
+        linger.ms: 20
+        max.request.size: 104857600

@@ -6,17 +6,15 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NotificationsListener {
-    Logger LOG = LoggerFactory.getLogger(NotificationsListener.class);
+public class NotificationListener {
+    Logger LOG = LoggerFactory.getLogger(NotificationListener.class);
 
-    @KafkaListener(topics = "notifications-1")
+    @KafkaListener(topics = "notifications")
     void listener(String data) {
         LOG.info(data);
     }
 
-    @KafkaListener(
-            topics = "notifications-1, notifications-2")//,
-            //groupId = "${spring.kafka.consumer.group-id}")
+    @KafkaListener(topics = "notifications")
     void commonListenerForMultipleTopics(String message) {
         LOG.info("MultipleTopicListener - {}", message);
     }

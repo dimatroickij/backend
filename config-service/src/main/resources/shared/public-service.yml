@@ -12,3 +12,16 @@ spring:
   datasource:
     hikari:
       maximumPoolSize: 5
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER_URL:localhost:9092}
+    client-id: public-service
+    producer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      acks: all
+      retries: 0x7fffffff
+      compressionType: snappy
+        batchSize: 32768
+        properties:
+          linger.ms: 20
+          max.request.size: 104857600

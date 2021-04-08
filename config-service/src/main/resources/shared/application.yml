@@ -1,8 +1,9 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: validate
-    show-sql: false
+      ddl-auto: update
+    show-sql: true
+    generate-ddl: false
   datasource:
     url: ${POSTGRES_URL:jdbc:postgresql://127.0.0.1:5432/appointment}
     initialization-mode: always

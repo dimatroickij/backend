@@ -7,7 +7,7 @@
 * Java 13+
 
 ##Запуск приложения
-1. Выполнить mvn clean package
+1. Выполнить mvn clean package -DskipTests
 2. Запустить все приложение через docker-compose -f docker-compose.yml либо создать конфигурацию в Inteliji IDEA
 
 ##Список сервисов и портов:

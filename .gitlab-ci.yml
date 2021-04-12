@@ -1,0 +1,22 @@
+stages:
+- test
+- package
+
+variables:
+  IMAGE_TAG: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
+
+test:
+  stage: test
+  image: openjdk:13-jdk-alpine
+  script:
+  - echo "Tests Complete!"
+
+build:
+  stage: build
+  image: openjdk:13-jdk-alpine
+  script:
+  - ./mvnw package -DskipTests
+  artifacts:
+    paths:
+    - ./*/target/*.jar
+    expire_in: 30 minutes

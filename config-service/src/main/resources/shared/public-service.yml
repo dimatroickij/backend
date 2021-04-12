@@ -16,8 +16,6 @@ spring:
     bootstrap-servers: ${KAFKA_SERVER_URL:localhost:9092}
     client-id: public-service
     producer:
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       acks: all
       retries: 0x7fffffff
       compressionType: snappy

@@ -1,6 +1,7 @@
 stages:
 - test
 - build
+- docker
 
 variables:
   IMAGE_TAG: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
@@ -20,3 +21,15 @@ build:
     paths:
     - ./*/target/*.jar
     expire_in: 30 minutes
+
+docker:
+  stage: docker
+  image: cr.yandex/crp5dhuuq8q568nh0cf0:buildah
+  script:
+  - buildah login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+  - >
+    for i in $(ls */ -d); do
+      dirname=${i%/}
+      buildah --storage-driver=vfs bud -t ${IMAGE_TAG}-$dirname $dirname
+      buildah --storage-driver=vfs push ${IMAGE_TAG}-$dirname
+    done

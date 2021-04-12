@@ -17,7 +17,7 @@
     <description>Информационный портал</description>
 
     <properties>
-        <java.version>13</java.version>
+        <java.version>11</java.version>
         <spring-cloud.version>2020.0.2</spring-cloud.version>
     </properties>
 
@@ -92,9 +92,9 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <release>13</release>
+                    <release>11</release>
                     <source>13</source>
-                    <target>13</target>
+                    <target>11</target>
                     <debug>true</debug>
                     <debuglevel>lines,vars,source</debuglevel>
 

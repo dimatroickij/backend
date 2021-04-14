@@ -8,10 +8,13 @@ stages:
 variables:
   IMAGE_TAG: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
   K8S_ARTIFACT: ci-k8s-${CI_PROJECT_PATH_SLUG}-${CI_COMMIT_SHORT_SHA}.yaml
+  REWRITE_TARGET: /$$1
+  PATH_PREFIX: /${CI_ENVIRONMENT_NAME}/${CI_PROJECT_NAME}/
   POSTGRES_URL: jdbc:postgresql://default.postgres/appointment
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
-  CONFIG_URL: http://config-service:8888
+  SERVER_PORT: 8080
+  CONFIG_URL: http://config-service:${SERVER_PORT}
   CONFIG_SERVICE_USER: user
   CONFIG_SERVICE_PASS: config_pass
   DEF_JAVA_OPTIONS: -Xms500m -Xmx500m -XX:+UseContainerSupport
@@ -48,8 +51,11 @@ envsubst on staging:
   stage: envsubst
   image: cr.yandex/crp5dhuuq8q568nh0cf0:envsubs
   script:
-  - export SERVICE_NAME=config-service
-  - envsubst -i ${SERVICE_NAME}/ci-k8s.yaml -o ${SERVICE_NAME}/${K8S_ARTIFACT}
+  - >
+    for ci-k8s-file in ./*-service/ci-k8s.yaml; do
+      export SERVICE_NAME=${ci-k8s-file%/ci-k8s.yaml}
+      envsubst -i $ci-k8s-file -o ${SERVICE_NAME}/${K8S_ARTIFACT}
+    done
   artifacts:
     paths:
     - ./*/${K8S_ARTIFACT}
@@ -64,7 +70,10 @@ deploy to staging:
   stage: deploy
   image: gcr.io/cloud-builders/kubectl:latest
   script:
-  - kubectl apply --record -f config-service/${K8S_ARTIFACT}
+  - >
+    for ci-k8s-file in ./*/${K8S_ARTIFACT}; do
+      kubectl apply --record -f ci-k8s-file
+    done
   environment:
     name: staging
   only:

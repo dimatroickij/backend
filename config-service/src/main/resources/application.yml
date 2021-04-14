@@ -2,7 +2,7 @@
 #    file:
 #      name: logs/config-service.log
 server:
-  port: 8888
+  port: ${SERVER_PORT:8888}
 
 spring:
   application:

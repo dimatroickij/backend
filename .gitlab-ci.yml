@@ -39,16 +39,17 @@ docker:
   - buildah login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
   - >
     for service_name in $(ls *-service -d); do
-      buildah --storage-driver=vfs bud -t ${IMAGE_TAG}-$service_name $service_name
-      buildah --storage-driver=vfs push ${IMAGE_TAG}-$service_name
+      export SERVICE_NAME=$service_name
+      buildah --storage-driver=vfs bud -t ${IMAGE_TAG}-${SERVICE_NAME} ${SERVICE_NAME}
+      buildah --storage-driver=vfs push ${IMAGE_TAG}-${SERVICE_NAME}
     done
 
 envsubst on staging:
   stage: envsubst
   image: cr.yandex/crp5dhuuq8q568nh0cf0:envsubs
   script:
-  - export
-  - envsubst -i config-service/ci-k8s.yaml -o config-service/${K8S_ARTIFACT}
+  - export SERVICE_NAME=config-service
+  - envsubst -i ${SERVICE_NAME}/ci-k8s.yaml -o ${SERVICE_NAME}/${K8S_ARTIFACT}
   artifacts:
     paths:
     - ./*/${K8S_ARTIFACT}

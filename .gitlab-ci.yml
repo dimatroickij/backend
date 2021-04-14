@@ -71,8 +71,8 @@ deploy to staging:
   image: gcr.io/cloud-builders/kubectl:latest
   script:
   - >
-    for ci_k8s_file in ./*/${K8S_ARTIFACT}; do
-      kubectl apply --record -f ci_k8s_file
+    for ci_k8s_file in ./*-service/${K8S_ARTIFACT}; do
+      kubectl apply --record -f $ci_k8s_file
     done
   environment:
     name: staging

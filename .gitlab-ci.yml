@@ -53,7 +53,8 @@ envsubst on staging:
   script:
   - >
     for ci_k8s_file in ./*-service/ci-k8s.yaml; do
-      export SERVICE_NAME=${ci_k8s_file%/ci-k8s.yaml}
+      dirname=${ci_k8s_file%/ci-k8s.yaml}
+      export SERVICE_NAME=${dirname#./}
       envsubst -i $ci_k8s_file -o ${SERVICE_NAME}/${K8S_ARTIFACT}
     done
   artifacts:

@@ -2,9 +2,19 @@ stages:
 - test
 - build
 - docker
+- envsubst
+- deploy
 
 variables:
   IMAGE_TAG: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
+  K8S_ARTIFACT: ci-k8s-${CI_PROJECT_PATH_SLUG}-${CI_COMMIT_SHORT_SHA}.yaml
+  POSTGRES_URL: jdbc:postgresql://default.postgres/appointment
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  CONFIG_URL: http://config-service:8888
+  CONFIG_SERVICE_USER: user
+  CONFIG_SERVICE_PASS: config_pass
+  DEF_JAVA_OPTIONS: -Xms500m -Xmx500m -XX:+UseContainerSupport
 
 test:
   stage: test
@@ -28,8 +38,33 @@ docker:
   script:
   - buildah login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
   - >
-    for i in $(ls */ -d); do
-      dirname=${i%/}
-      buildah --storage-driver=vfs bud -t ${IMAGE_TAG}-$dirname $dirname
-      buildah --storage-driver=vfs push ${IMAGE_TAG}-$dirname
+    for service_name in $(ls *-service -d); do
+      buildah --storage-driver=vfs bud -t ${IMAGE_TAG}-$service_name $service_name
+      buildah --storage-driver=vfs push ${IMAGE_TAG}-$service_name
     done
+
+envsubst on staging:
+  stage: envsubst
+  image: cr.yandex/crp5dhuuq8q568nh0cf0:envsubs
+  script:
+  - export
+  - envsubst -i config-service/ci-k8s.yaml -o config-service/${K8S_ARTIFACT}
+  artifacts:
+    paths:
+    - ./*/${K8S_ARTIFACT}
+    expire_in: 30 minutes
+  environment:
+    name: staging
+    action: prepare
+  only:
+  - develop
+
+deploy to staging:
+  stage: deploy
+  image: gcr.io/cloud-builders/kubectl:latest
+  script:
+  - kubectl apply --record -f config-service/${K8S_ARTIFACT}
+  environment:
+    name: staging
+  only:
+  - develop

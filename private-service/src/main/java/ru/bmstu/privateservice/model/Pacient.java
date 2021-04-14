@@ -1,5 +1,7 @@
 package ru.bmstu.privateservice.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -9,6 +11,8 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class Pacient {
 
     @Id
@@ -40,90 +44,4 @@ public class Pacient {
 
     @ManyToOne()
     private User user;
-
-    public Pacient(UUID id, String surName, String name, String middleName, Date birthDay, String policy, User user) {
-        this.id = id;
-        this.surName = surName;
-        this.name = name;
-        this.middleName = middleName;
-        this.birthDay = birthDay;
-        this.policy = policy;
-        this.user = user;
-    }
-
-    public Pacient(UUID id, String surName, String name, Date birthDay, String policy) {
-        this.id = id;
-        this.surName = surName;
-        this.name = name;
-        this.birthDay = birthDay;
-        this.policy = policy;
-    }
-
-    public Pacient(UUID id, String surName, String name, Date birthDay, String policy, User user) {
-        this.id = id;
-        this.surName = surName;
-        this.name = name;
-        this.birthDay = birthDay;
-        this.policy = policy;
-        this.user = user;
-    }
-
-    public Pacient() {
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getSurName() {
-        return surName;
-    }
-
-    public void setSurName(String surName) {
-        this.surName = surName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
-    public Date getBirthDay() {
-        return birthDay;
-    }
-
-    public void setBirthDay(Date birthDay) {
-        this.birthDay = birthDay;
-    }
-
-    public String getPolicy() {
-        return policy;
-    }
-
-    public void setPolicy(String policy) {
-        this.policy = policy;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

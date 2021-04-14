@@ -1,14 +1,13 @@
-package ru.bmstu.privateservice.controller;
+package ru.bmstu.privateservice.dto;
 
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 
 @Data
-public class RegistrationRequest {
+public class AuthRequest {
     @NotEmpty
     private String username;
-
     @NotEmpty
     private String password;
 }

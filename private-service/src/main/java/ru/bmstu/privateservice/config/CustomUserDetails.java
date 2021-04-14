@@ -11,12 +11,14 @@ import java.util.Collections;
 public class CustomUserDetails implements UserDetails {
 
     private String username;
+    private String email;
     private String password;
     private Collection<? extends GrantedAuthority> grantedAuthorities;
 
     public static CustomUserDetails fromUserEntityToCustomUserDetails(User user) {
         CustomUserDetails c = new CustomUserDetails();
         c.username = user.getUsername();
+        c.email = user.getEmail();
         c.password = user.getPassword();
         c.grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getName()));
         return c;

@@ -1,4 +1,4 @@
-package ru.bmstu.sendnotificationsservice.consumer;
+package ru.bmstu.sendnotificationsservice.component;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +12,5 @@ public class NotificationListener {
     @KafkaListener(topics = "notifications")
     void listener(String data) {
         LOG.info(data);
-    }
-
-    @KafkaListener(topics = "notifications")
-    void commonListenerForMultipleTopics(String message) {
-        LOG.info("MultipleTopicListener - {}", message);
     }
 }

@@ -1,23 +1,19 @@
 package ru.bmstu.publicservice.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import ru.bmstu.publicservice.producer.NotificationKafkaProducer;
-
-import java.util.UUID;
+import org.springframework.web.bind.annotation.PathVariable;
+import ru.bmstu.publicservice.component.NotificationProducer;
 
 @Controller
 public class NotificationController {
 
-    private final NotificationKafkaProducer notificationKafkaProducer;
+    @Autowired
+    private NotificationProducer notificationProducer;
 
-    public NotificationController(NotificationKafkaProducer notificationKafkaProducer) {
-        this.notificationKafkaProducer = notificationKafkaProducer;
-    }
-
-    @GetMapping("/test")
-    public void testRequest(){
-        Record record = new Record(UUID.randomUUID(), "Test");
-        notificationKafkaProducer.sendNotification(record);
+    @GetMapping("/send/{email}")
+    public void sendEmail(@PathVariable String email) {
+        notificationProducer.sendMessageWithCallback(email);
     }
 }

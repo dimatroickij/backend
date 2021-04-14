@@ -22,10 +22,7 @@ public class User{
 
     private String username;
     private String password;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ManyToOne
     private Role role = new Role();
 
     public User() {

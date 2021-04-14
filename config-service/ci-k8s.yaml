@@ -18,6 +18,10 @@ spec:
         ports:
         - containerPort: ${SERVER_PORT}
         env:
+        - name: CONFIG_HOST
+          value: "${CONFIG_HOST}"
+        - name: CONFIG_PORT
+          value: "${SERVER_PORT}"
         - name: SERVER_PORT
           value: "${SERVER_PORT}"
         - name: CONFIG_USER

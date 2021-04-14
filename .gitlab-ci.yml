@@ -14,7 +14,7 @@ variables:
   CONFIG_HOST: config-service
   CONFIG_USER: user
   CONFIG_PASS: config_pass
-  POSTGRES_URL: jdbc:postgresql://default.postgres/appointment
+  POSTGRES_URL: jdbc:postgresql://default.postgres:5432/appointment
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
   EMAIL_USERNAME: cloud.technologies33@gmail.com

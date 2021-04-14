@@ -52,9 +52,9 @@ envsubst on staging:
   image: cr.yandex/crp5dhuuq8q568nh0cf0:envsubs
   script:
   - >
-    for ci-k8s-file in ./*-service/ci-k8s.yaml; do
-      export SERVICE_NAME=${ci-k8s-file%/ci-k8s.yaml}
-      envsubst -i $ci-k8s-file -o ${SERVICE_NAME}/${K8S_ARTIFACT}
+    for ci_k8s_file in ./*-service/ci-k8s.yaml; do
+      export SERVICE_NAME=${ci_k8s_file%/ci-k8s.yaml}
+      envsubst -i $ci_k8s_file -o ${SERVICE_NAME}/${K8S_ARTIFACT}
     done
   artifacts:
     paths:
@@ -71,8 +71,8 @@ deploy to staging:
   image: gcr.io/cloud-builders/kubectl:latest
   script:
   - >
-    for ci-k8s-file in ./*/${K8S_ARTIFACT}; do
-      kubectl apply --record -f ci-k8s-file
+    for ci_k8s_file in ./*/${K8S_ARTIFACT}; do
+      kubectl apply --record -f ci_k8s_file
     done
   environment:
     name: staging

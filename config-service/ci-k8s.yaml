@@ -35,13 +35,13 @@ spec:
         - name: POSTGRES_PASSWORD
           value: "${POSTGRES_PASSWORD}"
         - name: EMAIL_USERNAME
-          value: ${EMAIL_USERNAME}
+          value: "${EMAIL_USERNAME}"
         - name: EMAIL_PASSWORD
-          value: ${EMAIL_PASSWORD}
+          value: "${EMAIL_PASSWORD}"
         - name: EMAIL_SEND_TO
-          value: ${EMAIL_SEND_TO}
+          value: "${EMAIL_SEND_TO}"
         - name: KAFKA_SERVER_URL
-          value: ${KAFKA_SERVER_URL}
+          value: "${KAFKA_SERVER_URL}"
         - name: DEF_JAVA_OPTIONS
           value: "${DEF_JAVA_OPTIONS}"
 

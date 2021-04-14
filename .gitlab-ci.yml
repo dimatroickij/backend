@@ -14,13 +14,13 @@ variables:
   CONFIG_HOST: config-service
   CONFIG_USER: user
   CONFIG_PASS: config_pass
-  POSTGRES_URL: jdbc:postgresql://default.postgres:5432/appointment
+  POSTGRES_URL: jdbc:postgresql://postgres.default:5432/appointment
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
   EMAIL_USERNAME: cloud.technologies33@gmail.com
   EMAIL_PASSWORD: qbNG9dDbNB
   EMAIL_SEND_TO: cloud.technologies33@gmail.com
-  KAFKA_SERVER_URL: default.kafka:9092
+  KAFKA_SERVER_URL: kafka.default:9092
   DEF_JAVA_OPTIONS: -Xms500m -Xmx500m -XX:+UseContainerSupport
 
 test:

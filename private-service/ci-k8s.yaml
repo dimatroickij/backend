@@ -18,16 +18,30 @@ spec:
         ports:
         - containerPort: ${SERVER_PORT}
         env:
-        - name: SERVER_PORT
-          value: "${SERVER_PORT}"
         - name: CONFIG_HOST
           value: "${CONFIG_HOST}"
         - name: CONFIG_PORT
+          value: "${SERVER_PORT}"
+        - name: SERVER_PORT
           value: "${SERVER_PORT}"
         - name: CONFIG_USER
           value: "${CONFIG_USER}"
         - name: CONFIG_PASS
           value: "${CONFIG_PASS}"
+        - name: POSTGRES_URL
+          value: "${POSTGRES_URL}"
+        - name: POSTGRES_USER
+          value: "${POSTGRES_USER}"
+        - name: POSTGRES_PASSWORD
+          value: "${POSTGRES_PASSWORD}"
+        - name: EMAIL_USERNAME
+          value: ${EMAIL_USERNAME}
+        - name: EMAIL_PASSWORD
+          value: ${EMAIL_PASSWORD}
+        - name: EMAIL_SEND_TO
+          value: ${EMAIL_SEND_TO}
+        - name: KAFKA_SERVER_URL
+          value: ${KAFKA_SERVER_URL}
         - name: DEF_JAVA_OPTIONS
           value: "${DEF_JAVA_OPTIONS}"
 

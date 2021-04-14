@@ -16,18 +16,30 @@ spec:
       - image: ${IMAGE_TAG}-${SERVICE_NAME}
         name: ${SERVICE_NAME}
         ports:
-        - containerPort: 8080
+        - containerPort: ${SERVER_PORT}
         env:
-        - name: CONFIG_URL
-          value: "${CONFIG_URL}"
-        - name: CONFIG_SERVICE_PASS
-          value: "${CONFIG_SERVICE_PASS}"
-        - name: CONFIG_SERVICE_USER
-          value: "${CONFIG_SERVICE_USER}"
-        - name: DEF_JAVA_OPTIONS
-          value: "${DEF_JAVA_OPTIONS}"
         - name: SERVER_PORT
           value: "${SERVER_PORT}"
+        - name: CONFIG_USER
+          value: "${CONFIG_USER}"
+        - name: CONFIG_PASS
+          value: "${CONFIG_PASS}"
+        - name: POSTGRES_URL
+          value: "${POSTGRES_URL}"
+        - name: POSTGRES_USER
+          value: "${POSTGRES_USER}"
+        - name: POSTGRES_PASSWORD
+          value: "${POSTGRES_PASSWORD}"
+        - name: EMAIL_USERNAME
+          value: ${EMAIL_USERNAME}
+        - name: EMAIL_PASSWORD
+          value: ${EMAIL_PASSWORD}
+        - name: EMAIL_SEND_TO
+          value: ${EMAIL_SEND_TO}
+        - name: KAFKA_SERVER_URL
+          value: ${KAFKA_SERVER_URL}
+        - name: DEF_JAVA_OPTIONS
+          value: "${DEF_JAVA_OPTIONS}"
 
 ---
 
@@ -39,9 +51,9 @@ spec:
   selector:
     app: ${SERVICE_NAME}
   ports:
-  - name: "8080"
-    port: 8080
-    targetPort: 8080
+  - name: "${SERVER_PORT}"
+    port: ${SERVER_PORT}
+    targetPort: ${SERVER_PORT}
   type: ClusterIP
 status:
   loadBalancer: {}

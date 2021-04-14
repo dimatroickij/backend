@@ -16,18 +16,20 @@ spec:
       - image: ${IMAGE_TAG}-${SERVICE_NAME}
         name: ${SERVICE_NAME}
         ports:
-        - containerPort: 8080
+        - containerPort: ${SERVER_PORT}
         env:
-        - name: CONFIG_URL
-          value: "${CONFIG_URL}"
-        - name: CONFIG_SERVICE_PASS
-          value: "${CONFIG_SERVICE_PASS}"
-        - name: CONFIG_SERVICE_USER
-          value: "${CONFIG_SERVICE_USER}"
-        - name: DEF_JAVA_OPTIONS
-          value: "${DEF_JAVA_OPTIONS}"
         - name: SERVER_PORT
           value: "${SERVER_PORT}"
+        - name: CONFIG_HOST
+          value: "${CONFIG_HOST}"
+        - name: CONFIG_PORT
+          value: "${SERVER_PORT}"
+        - name: CONFIG_USER
+          value: "${CONFIG_USER}"
+        - name: CONFIG_PASS
+          value: "${CONFIG_PASS}"
+        - name: DEF_JAVA_OPTIONS
+          value: "${DEF_JAVA_OPTIONS}"
 
 ---
 
@@ -39,9 +41,9 @@ spec:
   selector:
     app: ${SERVICE_NAME}
   ports:
-  - name: "8080"
-    port: 8080
-    targetPort: 8080
+  - name: "${SERVER_PORT}"
+    port: ${SERVER_PORT}
+    targetPort: ${SERVER_PORT}
   type: ClusterIP
 status:
   loadBalancer: {}
@@ -65,8 +67,8 @@ spec:
   rules:
   - http:
       paths:
-      - path: ${PATH_PREFIX}/${SERVICE_NAME}?(.*)
+      - path: ${PATH_PREFIX}${SERVICE_NAME}?(.*)
         pathType: Prefix
         backend:
           serviceName: ${SERVICE_NAME}
-          servicePort: 8080
+          servicePort: ${SERVER_PORT}

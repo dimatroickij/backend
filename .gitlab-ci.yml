@@ -10,13 +10,17 @@ variables:
   K8S_ARTIFACT: ci-k8s-${CI_PROJECT_PATH_SLUG}-${CI_COMMIT_SHORT_SHA}.yaml
   REWRITE_TARGET: /$$1
   PATH_PREFIX: /${CI_ENVIRONMENT_NAME}/${CI_PROJECT_NAME}/
+  SERVER_PORT: 8080
+  CONFIG_HOST: config-service
+  CONFIG_USER: user
+  CONFIG_PASS: config_pass
   POSTGRES_URL: jdbc:postgresql://default.postgres/appointment
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
-  SERVER_PORT: 8080
-  CONFIG_URL: http://config-service:${SERVER_PORT}
-  CONFIG_SERVICE_USER: user
-  CONFIG_SERVICE_PASS: config_pass
+  EMAIL_USERNAME: cloud.technologies33@gmail.com
+  EMAIL_PASSWORD: qbNG9dDbNB
+  EMAIL_SEND_TO: cloud.technologies33@gmail.com
+  KAFKA_SERVER_URL: default.kafka:9092
   DEF_JAVA_OPTIONS: -Xms500m -Xmx500m -XX:+UseContainerSupport
 
 test:

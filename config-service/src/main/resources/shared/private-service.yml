@@ -2,7 +2,7 @@
 #    file:
 #      name: logs/private-service.log
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
 
 spring:
   jpa:

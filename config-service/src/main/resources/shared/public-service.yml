@@ -2,7 +2,7 @@
 #  file:
 #    name: logs/public-service.log
 server:
-  port: 8081
+  port: ${SERVER_PORT:8081}
 
 spring:
   jpa:

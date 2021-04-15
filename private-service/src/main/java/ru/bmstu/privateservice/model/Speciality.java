@@ -22,7 +22,7 @@ public class Speciality {
     @Schema(description = "ID")
     private Long id;
 
-    @Column
+    @Column(unique = true, nullable = false)
     @NotBlank
     @Schema(description = "Название специальности")
     private String name;

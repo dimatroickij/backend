@@ -15,6 +15,6 @@ public class AuthRequest {
     private String username;
 
     @NotBlank
-    @Schema(description = "Пароль")
+    @Schema(format = "password", description = "Пароль")
     private String password;
 }

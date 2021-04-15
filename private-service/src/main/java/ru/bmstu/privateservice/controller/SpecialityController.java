@@ -5,15 +5,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-import ru.bmstu.privateservice.dto.PacientRequest;
-import ru.bmstu.privateservice.dto.PacientResponse;
-import ru.bmstu.privateservice.model.Pacient;
 import ru.bmstu.privateservice.model.Speciality;
 import ru.bmstu.privateservice.repository.SpecialityRepository;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/speciality")
@@ -48,12 +44,12 @@ public class SpecialityController {
 
     @Operation(summary = "Изменение названия специальности")
     @PutMapping("/update/{id}")
-    public Speciality update(@RequestBody String request, @PathVariable Long id) {
+    public String update(@RequestBody String request, @PathVariable Long id) {
         if (specialityRepository.existsById(id)) {
             Speciality speciality = new Speciality();
             speciality.setName(request);
             specialityRepository.save(speciality);
-            return speciality;
+            return speciality.getName();
         }
         return null;
     }

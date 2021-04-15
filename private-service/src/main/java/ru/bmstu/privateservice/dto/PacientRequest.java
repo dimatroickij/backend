@@ -24,7 +24,7 @@ public class PacientRequest {
     private String middleName;
 
     @NotBlank
-    @Schema(type = "date", description = "Дата рождения", example = "YYYY-MM-DD")
+    @Schema(type = "string", format = "date", description = "Дата рождения", example = "YYYY-MM-DD")
     private Date birthDay;
 
     @NotBlank

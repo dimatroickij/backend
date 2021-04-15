@@ -18,22 +18,19 @@ public class Appointment {
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @Column
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID codeAppointment;
-
     @ManyToOne
+    @NotNull
     private final Pacient pacient = new Pacient();
 
     @ManyToOne
+    @NotNull
     private Schedule schedule = new Schedule();
 
-    @Column
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     private Date dateRecord = new Date();
 
-    @Column
-    private Boolean isActive;
+    @Column(nullable = false)
+    private Boolean isActive = true;
 }

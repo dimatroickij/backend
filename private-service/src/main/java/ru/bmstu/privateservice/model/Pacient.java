@@ -15,27 +15,27 @@ import java.util.UUID;
 public class Pacient {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
+    @GeneratedValue(generator = "uuid2", strategy = GenerationType.IDENTITY)
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     @NotEmpty
     private String surName;
 
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     @NotEmpty
     private String name;
 
     @Column(length = 20)
     private String middleName;
 
-    @Column
+    @Column(nullable = false)
     @NotEmpty
     @Temporal(TemporalType.DATE)
     private Date birthDay;
 
-    @Column(length = 16, unique = true)
+    @Column(length = 16, unique = true, nullable = false)
     @NotEmpty
     private String policy;
 

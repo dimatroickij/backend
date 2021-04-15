@@ -1,8 +1,6 @@
 package ru.bmstu.privateservice.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +8,6 @@ import ru.bmstu.privateservice.dto.PacientRequest;
 import ru.bmstu.privateservice.dto.PacientResponse;
 import ru.bmstu.privateservice.model.Pacient;
 import ru.bmstu.privateservice.repository.PacientRepository;
-import ru.bmstu.privateservice.repository.UserRepository;
 import ru.bmstu.privateservice.utils.PacientMapping;
 
 import javax.validation.Valid;

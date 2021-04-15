@@ -31,10 +31,10 @@ public class DoctorRequest {
 
     @NotBlank
     @Email
-    @Schema(type = "email", description = "Email", example = "email@email.email")
+    @Schema(format = "email", description = "Email", example = "email@email.email")
     private String email;
 
     @NotBlank
-    @Schema(description = "Пароль")
+    @Schema(format = "password", description = "Пароль")
     private String password;
 }

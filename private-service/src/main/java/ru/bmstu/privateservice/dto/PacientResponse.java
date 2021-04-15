@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -31,7 +33,8 @@ public class PacientResponse {
     private String middleName;
 
     @NotBlank
-    @Schema(type = "date", description = "Дата рождения", example = "YYYY-MM-DD")
+    @Schema(type = "string", format = "date", description = "Дата рождения", example = "YYYY-MM-DD")
+    @Temporal(TemporalType.DATE)
     private Date birthDay;
 
     @NotBlank

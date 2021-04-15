@@ -16,7 +16,7 @@ import java.util.UUID;
 public class RegistrationResponse {
 
     @NotBlank
-
+    @Schema(description = "ID")
     private UUID id;
 
     @NotBlank
@@ -25,7 +25,7 @@ public class RegistrationResponse {
 
     @NotBlank
     @Email
-    @Schema(type = "email", description = "Email", example = "email@email.email")
+    @Schema(format = "email", description = "Email", example = "email@email.email")
     private String email;
 
     @NotBlank

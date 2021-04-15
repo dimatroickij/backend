@@ -1,5 +1,6 @@
 package ru.bmstu.privateservice.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -12,7 +13,9 @@ import java.util.UUID;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Doctor {
+
     @Id
     @NotEmpty
     @GeneratedValue(generator = "uuid2")
@@ -20,12 +23,12 @@ public class Doctor {
     private UUID id;
 
     @Size(min = 3, max = 20)
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     @NotEmpty
     private String surName;
 
     @Size(min = 3, max = 20)
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     @NotEmpty
     private String name;
 

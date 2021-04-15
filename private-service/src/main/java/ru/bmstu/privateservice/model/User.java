@@ -8,13 +8,11 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "username")
-        })
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 public class User{
@@ -25,20 +23,19 @@ public class User{
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @Column
-    @NotEmpty
+    @Column(unique = true, nullable = false)
+    @NotNull
     private String username;
 
-    @Column
-    @NotEmpty
+    @Column(unique = true, nullable = false)
+    @NotNull
     @Email(regexp=".*@.*\\..*", message = "Почта должна быть действующей")
     private String email;
 
-    @Column
-    @NotEmpty
+    @Column(nullable = false)
+    @NotNull
     private String password;
 
     @ManyToOne
-    @NotEmpty
     private Role role = new Role();
 }

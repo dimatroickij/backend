@@ -19,19 +19,20 @@ public class Schedule {
     private UUID id;
 
     @ManyToOne
+    @NotNull
     private Doctor doctor = new Doctor();
 
-    @Column
+    @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     @NotNull
     private Date date = new Date();
 
-    @Column
+    @Column(nullable = false)
     @NotNull
     @Temporal(TemporalType.TIME)
     private Date startTime = new Date();
 
-    @Column
+    @Column(nullable = false)
     @NotNull
     @Temporal(TemporalType.DATE)
     private Date endTime = new Date();

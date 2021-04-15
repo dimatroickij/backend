@@ -19,12 +19,12 @@ import javax.validation.constraints.NotBlank;
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotBlank
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(description = "ID")
     private Long id;
 
-    @Column(length = 20)
+    @Column(length = 20, nullable = false, unique = true)
     @NotBlank
     @Schema(description = "Название роли")
     private String name;

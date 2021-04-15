@@ -13,7 +13,7 @@ spec:
         app: ${SERVICE_NAME}
     spec:
       containers:
-      - image: ${IMAGE_TAG}-${SERVICE_NAME}
+      - image: ${IMAGE_TAG}
         name: ${SERVICE_NAME}
         ports:
         - containerPort: ${SERVER_PORT}

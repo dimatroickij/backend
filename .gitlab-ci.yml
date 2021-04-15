@@ -6,7 +6,7 @@ stages:
 - deploy
 
 variables:
-  IMAGE_TAG: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
+  IMAGE_TAG: ${CI_REGISTRY_IMAGE}/${SERVICE_NAME}:${CI_COMMIT_SHORT_SHA}
   K8S_ARTIFACT: ci-k8s-${CI_PROJECT_PATH_SLUG}-${CI_COMMIT_SHORT_SHA}.yaml
   REWRITE_TARGET: /$$1
   PATH_PREFIX: /${CI_ENVIRONMENT_NAME}/${CI_PROJECT_NAME}/
@@ -47,8 +47,8 @@ docker:
   - >
     for service_name in $(ls *-service -d); do
       export SERVICE_NAME=$service_name
-      buildah --storage-driver=vfs bud -t ${IMAGE_TAG}-${SERVICE_NAME} ${SERVICE_NAME}
-      buildah --storage-driver=vfs push ${IMAGE_TAG}-${SERVICE_NAME}
+      buildah --storage-driver=vfs bud -t ${IMAGE_TAG} ${SERVICE_NAME}
+      buildah --storage-driver=vfs push ${IMAGE_TAG}
     done
 
 envsubst on staging:

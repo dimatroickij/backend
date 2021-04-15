@@ -7,15 +7,10 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
-public class PacientResponse {
-
-    @NotBlank
-    @Schema(description = "ID")
-    private UUID id;
+public class PacientRequest {
 
     @NotBlank
     @Schema(description = "Фамилия")
@@ -36,10 +31,4 @@ public class PacientResponse {
     @Size(min = 16, max = 16)
     @Schema(description = "Номер полиса", example = "0000000000000000")
     private String policy;
-
-    //private String username;
-
-    public PacientResponse() {
-
-    }
 }

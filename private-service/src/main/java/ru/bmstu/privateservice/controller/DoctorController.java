@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/doctor")
-@Tag(name = "Doctor controller", description = "Операции с данными работников")
+@Tag(name = "Doctor", description = "Операции с данными работников")
 public class DoctorController {
     @Autowired
     private DoctorRepository doctorRepository;
@@ -41,8 +41,15 @@ public class DoctorController {
 
     @Operation(summary = "Список сотрудников")
     @GetMapping("/all")
-    public List<DoctorResponse> allDoctors() {
+    public List<DoctorResponse> all() {
         return doctorRepository.findAll().stream().map(doctorMapping::mapToDoctor).collect(Collectors.toList());
+    }
+
+    @Operation(summary = "Список сотрудников в зависимости от специальности")
+    @GetMapping("/all/{speciality}")
+    public List<DoctorResponse> getBySpeciality(@PathVariable Long speciality) {
+        return doctorRepository.findAllBySpeciality(specialityRepository.getOne(speciality)).stream().
+                map(doctorMapping::mapToDoctor).collect(Collectors.toList());
     }
 
     @Operation(summary = "Просмотр данных конкретного сотрудника")
@@ -50,15 +57,14 @@ public class DoctorController {
     public DoctorResponse get(@PathVariable UUID id) {
         if (doctorRepository.existsById(id)) {
             Doctor doctor = doctorRepository.getOne(id);
-            return new DoctorResponse(doctor.getId(), doctor.getSurName(), doctor.getName(), doctor.getMiddleName(),
-                    doctor.getSpeciality());
+            return doctorMapping.mapToDoctor(doctor);
         }
         return null;
     }
 
     @Operation(summary = "Добавление сотрудника")
     @PostMapping("/add")
-    public UUID add(@RequestBody @Valid DoctorRequest request) {
+    public DoctorResponse add(@RequestBody @Valid DoctorRequest request) {
         Doctor doctor = new Doctor();
         doctor.setSurName(request.getSurName());
         doctor.setName(request.getName());
@@ -73,7 +79,7 @@ public class DoctorController {
 
         doctor.setUser(u);
         doctorRepository.save(doctor);
-        return doctor.getId();
+        return doctorMapping.mapToDoctor(doctor);
     }
 
     @Operation(summary = "Изменение данных у конкретного сотрудника")
@@ -86,8 +92,7 @@ public class DoctorController {
             doctor.setMiddleName(request.getMiddleName());
             doctor.setSpeciality(specialityRepository.getOne(request.getSpeciality()));
             doctorRepository.save(doctor);
-            return new DoctorResponse(doctor.getId(), doctor.getSurName(), doctor.getName(), doctor.getMiddleName(),
-                    doctor.getSpeciality());
+            return doctorMapping.mapToDoctor(doctor);
         }
         return null;
     }

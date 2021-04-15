@@ -33,7 +33,7 @@ public class Doctor {
     @Column(length = 20)
     private String middleName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotEmpty
     private Speciality speciality = new Speciality();
 

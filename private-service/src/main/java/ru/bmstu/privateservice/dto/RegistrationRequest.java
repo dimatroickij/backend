@@ -1,6 +1,5 @@
 package ru.bmstu.privateservice.dto;
 
-import io.swagger.v3.oas.annotations.Parameter;
 import lombok.Data;
 
 import javax.validation.constraints.Email;

@@ -47,11 +47,8 @@ docker:
     for service_name in $(ls *-service -d); do
       export SERVICE_NAME=$service_name
       export IMAGE_TAG=${CI_REGISTRY_IMAGE}/${SERVICE_NAME}:${CI_COMMIT_SHORT_SHA}
-      buildah manifest inspect ${IMAGE_TAG}
-      if [ $? -eq 1 ]; then
-        buildah --storage-driver=vfs bud -t ${IMAGE_TAG} ${SERVICE_NAME}
-        buildah --storage-driver=vfs push ${IMAGE_TAG}
-      fi
+      buildah --storage-driver=vfs bud -t ${IMAGE_TAG} ${SERVICE_NAME}
+      buildah --storage-driver=vfs push ${IMAGE_TAG}
     done
 
 envsubst on staging:

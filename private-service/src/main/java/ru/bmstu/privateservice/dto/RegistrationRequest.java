@@ -1,19 +1,26 @@
 package ru.bmstu.privateservice.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Data
+@AllArgsConstructor
 public class RegistrationRequest {
-    @NotEmpty
+
+    @NotBlank
+    @Schema(description = "Логин")
     private String username;
 
-    @NotEmpty
+    @NotBlank
     @Email
+    @Schema(type = "email", description = "Email", example = "email@email.email")
     private String email;
 
-    @NotEmpty
+    @NotBlank
+    @Schema(description = "Пароль")
     private String password;
 }

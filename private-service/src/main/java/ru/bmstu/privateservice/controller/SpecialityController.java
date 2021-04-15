@@ -1,6 +1,7 @@
 package ru.bmstu.privateservice.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -18,12 +19,14 @@ public class SpecialityController {
     @Autowired
     private SpecialityRepository specialityRepository;
 
+    @SecurityRequirements
     @Operation(summary = "Список специальностей")
     @GetMapping("/all")
     public List<Speciality> all() {
         return specialityRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
 
+    @SecurityRequirements
     @Operation(summary = "Название специальности по ID")
     @GetMapping("/{id}")
     public String get(@PathVariable Long id) {
@@ -33,7 +36,7 @@ public class SpecialityController {
         return null;
     }
 
-    @Operation(summary = "Добавление специальности")
+    @Operation(summary = "Добавление специальности", description = "Доступно для пользователей с ролью ADMIN")
     @PostMapping("/add")
     public Speciality add(@RequestBody @Valid String request) {
         Speciality speciality = new Speciality();
@@ -42,7 +45,7 @@ public class SpecialityController {
         return speciality;
     }
 
-    @Operation(summary = "Изменение названия специальности")
+    @Operation(summary = "Изменение названия специальности", description = "Доступно для пользователей с ролью ADMIN")
     @PutMapping("/update/{id}")
     public String update(@RequestBody String request, @PathVariable Long id) {
         if (specialityRepository.existsById(id)) {
@@ -54,7 +57,7 @@ public class SpecialityController {
         return null;
     }
 
-    @Operation(summary = "Удаление специальности")
+    @Operation(summary = "Удаление специальности", description = "Доступно для пользователей с ролью ADMIN")
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         if (specialityRepository.existsById(id)) {

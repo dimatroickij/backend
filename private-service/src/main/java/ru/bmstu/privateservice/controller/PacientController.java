@@ -28,13 +28,14 @@ public class PacientController {
     @Autowired
     private PacientMapping pacientMapping;
 
-    @Operation(summary = "Список пациентов")
+    @Operation(summary = "Список пациентов", description = "Доступно для пользователей с ролью ADMIN")
     @GetMapping("/all")
     public List<PacientResponse> all() {
         return pacientRepository.findAll().stream().map(pacientMapping::mapToPacient).collect(Collectors.toList());
     }
 
-    @Operation(summary = "Просмотр данных конкретного пациента")
+    @Operation(summary = "Просмотр данных конкретного пациента",
+            description = "Доступно для пользователей с ролью ADMIN")
     @GetMapping("/{id}")
     public PacientResponse get(@PathVariable UUID id) {
         if (pacientRepository.existsById(id)) {
@@ -44,7 +45,7 @@ public class PacientController {
         return null;
     }
 
-    @Operation(summary = "Добавление пациента")
+    @Operation(summary = "Добавление пациента", description = "Доступно для пользователей с ролью ADMIN")
     @PostMapping("/add")
     public PacientResponse add(@RequestBody @Valid PacientRequest request) {
         Pacient pacient = new Pacient();
@@ -58,7 +59,8 @@ public class PacientController {
         return pacientMapping.mapToPacient(pacient);
     }
 
-    @Operation(summary = "Изменение данных у конкретного пациента")
+    @Operation(summary = "Изменение данных у конкретного пациента",
+            description = "Доступно для пользователей с ролью ADMIN")
     @PutMapping("/update/{id}")
     public PacientResponse update(@RequestBody PacientRequest request, @PathVariable UUID id) {
         if (pacientRepository.existsById(id)) {
@@ -74,7 +76,7 @@ public class PacientController {
         return null;
     }
 
-    @Operation(summary = "Удаление пациента")
+    @Operation(summary = "Удаление пациента", description = "Доступно для пользователей с ролью ADMIN")
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable UUID id) {
         if (pacientRepository.existsById(id)) {

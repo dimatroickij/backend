@@ -1,6 +1,7 @@
 package ru.bmstu.privateservice.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,12 +40,14 @@ public class DoctorController {
     @Autowired
     private DoctorMapping doctorMapping;
 
+    @SecurityRequirements
     @Operation(summary = "Список сотрудников")
     @GetMapping("/all")
     public List<DoctorResponse> all() {
         return doctorRepository.findAll().stream().map(doctorMapping::mapToDoctor).collect(Collectors.toList());
     }
 
+    @SecurityRequirements
     @Operation(summary = "Список сотрудников в зависимости от специальности")
     @GetMapping("/all/{speciality}")
     public List<DoctorResponse> getBySpeciality(@PathVariable Long speciality) {
@@ -52,6 +55,7 @@ public class DoctorController {
                 map(doctorMapping::mapToDoctor).collect(Collectors.toList());
     }
 
+    @SecurityRequirements
     @Operation(summary = "Просмотр данных конкретного сотрудника")
     @GetMapping("/{id}")
     public DoctorResponse get(@PathVariable UUID id) {
@@ -62,7 +66,7 @@ public class DoctorController {
         return null;
     }
 
-    @Operation(summary = "Добавление сотрудника")
+    @Operation(summary = "Добавление сотрудника", description = "Доступно для пользователей с ролью ADMIN")
     @PostMapping("/add")
     public DoctorResponse add(@RequestBody @Valid DoctorRequest request) {
         Doctor doctor = new Doctor();
@@ -82,7 +86,8 @@ public class DoctorController {
         return doctorMapping.mapToDoctor(doctor);
     }
 
-    @Operation(summary = "Изменение данных у конкретного сотрудника")
+    @Operation(summary = "Изменение данных у конкретного сотрудника",
+            description = "Доступно для пользователей с ролью ADMIN")
     @PutMapping("/update/{id}")
     public DoctorResponse update(@RequestBody DoctorUpdateRequest request, @PathVariable UUID id) {
         if (doctorRepository.existsById(id)) {
@@ -97,7 +102,7 @@ public class DoctorController {
         return null;
     }
 
-    @Operation(summary = "Удаление сотрудника")
+    @Operation(summary = "Удаление сотрудника", description = "Доступно для пользователей с ролью ADMIN")
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable UUID id) {
         if (doctorRepository.existsById(id)) {

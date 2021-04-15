@@ -3,6 +3,7 @@ package ru.bmstu.privateservice.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +27,10 @@ public class AuthController {
     @Autowired
     private JwtProvider jwtProvider;
 
-    @Operation(summary = "Регистрация в системе")
+    @SecurityRequirements
+    @Operation(summary = "Регистрация в системе",
+            description = "Данный метод используется пользователями для регистрации в системе. " +
+                    "Сотрудников добавляет администратор")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Регистрация прошла успешно"),
             @ApiResponse(responseCode = "401", description = "У вас нет прав на регистрацию"),
@@ -43,6 +47,7 @@ public class AuthController {
         return new RegistrationResponse(u.getId(), u.getUsername(), u.getEmail(), u.getRole());
     }
 
+    @SecurityRequirements
     @Operation(summary = "Авторизация")
     @PostMapping("/auth")
     public AuthResponse auth(@RequestBody AuthRequest request) {

@@ -32,4 +32,8 @@ public class DoctorResponse {
     @NotBlank
     @Schema(description = "Специальность работника")
     private Speciality speciality;
+
+    @NotBlank
+    @Schema(description = "Номер кабинета")
+    private String cabinet;
 }

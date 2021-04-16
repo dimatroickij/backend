@@ -13,6 +13,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 public class Schedule {
+
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
@@ -37,6 +38,4 @@ public class Schedule {
     @Temporal(TemporalType.DATE)
     private Date endTime = new Date();
 
-    @Column
-    private String cabinet;
 }

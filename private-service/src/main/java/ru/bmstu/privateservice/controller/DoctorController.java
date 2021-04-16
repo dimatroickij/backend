@@ -74,6 +74,7 @@ public class DoctorController {
         doctor.setName(request.getName());
         doctor.setMiddleName(request.getMiddleName());
         doctor.setSpeciality(specialityRepository.getOne(request.getSpeciality()));
+        doctor.setCabinet(request.getCabinet());
 
         User u = new User();
         u.setPassword(request.getPassword());
@@ -89,13 +90,14 @@ public class DoctorController {
     @Operation(summary = "Изменение данных у конкретного сотрудника",
             description = "Доступно для пользователей с ролью ADMIN")
     @PutMapping("/update/{id}")
-    public DoctorResponse update(@RequestBody DoctorUpdateRequest request, @PathVariable UUID id) {
+    public DoctorResponse update(@RequestBody @Valid DoctorUpdateRequest request, @PathVariable UUID id) {
         if (doctorRepository.existsById(id)) {
             Doctor doctor = doctorRepository.getOne(id);
             doctor.setSurName(request.getSurName());
             doctor.setName(request.getName());
             doctor.setMiddleName(request.getMiddleName());
             doctor.setSpeciality(specialityRepository.getOne(request.getSpeciality()));
+            doctor.setCabinet(request.getCabinet());
             doctorRepository.save(doctor);
             return doctorMapping.mapToDoctor(doctor);
         }

@@ -1,6 +1,8 @@
 package ru.bmstu.privateservice.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
@@ -50,6 +52,9 @@ public class AuthController {
     @SecurityRequirements
     @Operation(summary = "Авторизация")
     @PostMapping("/auth")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Авторизация успешно выполнена",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = AuthResponse.class))})})
     public AuthResponse auth(@RequestBody AuthRequest request) {
         User user = userService.findByUsernameAndPassword(request.getUsername(), request.getPassword());
         String token = jwtProvider.generateToken(user.getUsername());

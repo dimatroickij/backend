@@ -40,6 +40,10 @@ public class Doctor {
     @NotEmpty
     private Speciality speciality = new Speciality();
 
+    @Column(nullable = false)
+    @NotEmpty
+    private String cabinet;
+
     @ManyToOne
     @NotEmpty
     private User user = new User();

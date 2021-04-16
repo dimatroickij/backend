@@ -24,4 +24,8 @@ public class DoctorUpdateRequest {
     @NotBlank
     @Schema(description = "ID специальности")
     private Long speciality;
+
+    @NotBlank
+    @Schema(description = "Номер кабинета")
+    private String cabinet;
 }

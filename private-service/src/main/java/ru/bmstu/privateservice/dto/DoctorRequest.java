@@ -3,6 +3,8 @@ package ru.bmstu.privateservice.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
@@ -24,6 +26,10 @@ public class DoctorRequest {
     @NotBlank
     @Schema(description = "ID специальности")
     private Long speciality;
+
+    @NotBlank
+    @Schema(description = "Номер кабинета")
+    private String cabinet;
 
     @NotBlank
     @Schema(description = "Логин")

@@ -14,6 +14,7 @@ public class DoctorMapping {
         dto.setMiddleName(doctor.getMiddleName());
         dto.setSurName(doctor.getSurName());
         dto.setSpeciality(doctor.getSpeciality());
+        dto.setCabinet(doctor.getCabinet());
         return dto;
     }
 }

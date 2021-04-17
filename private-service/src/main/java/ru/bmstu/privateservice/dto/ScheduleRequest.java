@@ -19,14 +19,17 @@ public class ScheduleRequest {
     private UUID doctor;
 
     @NotBlank
-    @Schema(type = "string", format = "date", description = "Дата приёма", example = "YYYY-MM-DD")
-    private Date date;
+    @Schema(type = "string", pattern = "^(0[1-9]|[12][0-9]|3[01])\\.(0[1-9]|1[012]).\\d{4}$",
+            description = "Дата приёма", example = "dd.MM.yyyy")
+    private String date;
 
     @NotBlank
-    @Schema(type = "string", format = "time", description = "Время начала приёма", example = "")
-    private Date startTime;
+    @Schema(type = "string", pattern = "^([0-1]\\d|[2][0-3]|3[01]):([0-5]\\d)$", description = "Время начала приёма",
+            example = "HH:mm")
+    private String startTime;
 
     @NotBlank
-    @Schema(type = "string", format = "time", description = "Время окончания приёма", example = "")
-    private Date endTime;
+    @Schema(type = "string", pattern = "^([0-1]\\d|[2][0-3]|3[01]):([0-5]\\d)$", description = "Время окончания приёма",
+            example = "HH:mm")
+    private String endTime;
 }

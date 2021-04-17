@@ -34,7 +34,9 @@ public class AuthController {
             description = "Данный метод используется пользователями для регистрации в системе. " +
                     "Сотрудников добавляет администратор")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Регистрация прошла успешно"),
+            @ApiResponse(responseCode = "200", description = "Авторизация успешно выполнена",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AuthResponse.class))}),
             @ApiResponse(responseCode = "401", description = "У вас нет прав на регистрацию"),
             @ApiResponse(responseCode = "409", description = "Ошибка при сохранении данных в БД"),
             @ApiResponse(responseCode = "500", description = "Ошибка сервера")

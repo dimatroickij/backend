@@ -1,6 +1,10 @@
 package ru.bmstu.privateservice.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +15,8 @@ import ru.bmstu.privateservice.repository.PacientRepository;
 import ru.bmstu.privateservice.utils.PacientMapping;
 
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -36,6 +42,8 @@ public class PacientController {
 
     @Operation(summary = "Просмотр данных конкретного пациента",
             description = "Доступно для пользователей с ролью ADMIN")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = PacientResponse.class))})})
     @GetMapping("/{id}")
     public PacientResponse get(@PathVariable UUID id) {
         if (pacientRepository.existsById(id)) {
@@ -46,13 +54,16 @@ public class PacientController {
     }
 
     @Operation(summary = "Добавление пациента", description = "Доступно для пользователей с ролью ADMIN")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Пациент добавлен",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = PacientResponse.class))})})
     @PostMapping("/add")
-    public PacientResponse add(@RequestBody @Valid PacientRequest request) {
+    public PacientResponse add(@RequestBody @Valid PacientRequest request) throws ParseException {
         Pacient pacient = new Pacient();
         pacient.setSurName(request.getSurName());
         pacient.setName(request.getName());
         pacient.setMiddleName(request.getMiddleName());
-        pacient.setBirthDay(request.getBirthDay());
+        pacient.setBirthDay(new SimpleDateFormat("dd.MM.yyyy").parse(request.getBirthDay()));
         pacient.setPolicy(request.getPolicy());
 
         pacientRepository.save(pacient);
@@ -61,14 +72,17 @@ public class PacientController {
 
     @Operation(summary = "Изменение данных у конкретного пациента",
             description = "Доступно для пользователей с ролью ADMIN")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Данные пациента изменены",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = PacientResponse.class))})})
     @PutMapping("/update/{id}")
-    public PacientResponse update(@RequestBody PacientRequest request, @PathVariable UUID id) {
+    public PacientResponse update(@RequestBody PacientRequest request, @PathVariable UUID id) throws ParseException {
         if (pacientRepository.existsById(id)) {
             Pacient pacient = pacientRepository.getOne(id);
             pacient.setSurName(request.getSurName());
             pacient.setName(request.getName());
             pacient.setMiddleName(request.getMiddleName());
-            pacient.setBirthDay(request.getBirthDay());
+            pacient.setBirthDay(new SimpleDateFormat("dd.MM.yyyy").parse(request.getBirthDay()));
             pacient.setPolicy(request.getPolicy());
             pacientRepository.save(pacient);
             return pacientMapping.mapToPacient(pacient);

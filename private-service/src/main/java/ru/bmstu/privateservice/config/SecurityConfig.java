@@ -30,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/doctor/add", "/doctor/update/*", "/doctor/delete/*").hasRole("ADMIN")
                 .antMatchers("/pacient/*").hasRole("ADMIN")
                 .antMatchers("/speciality/add", "/speciality/update/*", "/speciality/delete/*").hasRole("ADMIN")
-                .antMatchers("/schedule/add", "/schedule/update/*", "/schedule/delete/*").hasRole("ADMIN")
+                .antMatchers("/schedule/add", "/schedule/update/*", "/schedule/delete/*").
+                hasAnyRole("ADMIN", "DOCTOR")
 //                .antMatchers("/register", "/auth", "/speciality/*").permitAll()
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

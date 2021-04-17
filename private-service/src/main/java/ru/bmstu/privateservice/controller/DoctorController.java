@@ -1,6 +1,10 @@
 package ru.bmstu.privateservice.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +61,8 @@ public class DoctorController {
 
     @SecurityRequirements
     @Operation(summary = "Просмотр данных конкретного сотрудника")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", content = {@Content(mediaType = "application/json",
+            schema = @Schema(implementation = DoctorResponse.class))})})
     @GetMapping("/{id}")
     public DoctorResponse get(@PathVariable UUID id) {
         if (doctorRepository.existsById(id)) {
@@ -67,6 +73,9 @@ public class DoctorController {
     }
 
     @Operation(summary = "Добавление сотрудника", description = "Доступно для пользователей с ролью ADMIN")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Работник добавлен",
+            content = {@Content(mediaType = "application/json",
+            schema = @Schema(implementation = DoctorResponse.class))})})
     @PostMapping("/add")
     public DoctorResponse add(@RequestBody @Valid DoctorRequest request) {
         Doctor doctor = new Doctor();
@@ -89,6 +98,9 @@ public class DoctorController {
 
     @Operation(summary = "Изменение данных у конкретного сотрудника",
             description = "Доступно для пользователей с ролью ADMIN")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Данные работника изменены",
+            content = {@Content(mediaType = "application/json",
+            schema = @Schema(implementation = DoctorResponse.class))})})
     @PutMapping("/update/{id}")
     public DoctorResponse update(@RequestBody @Valid DoctorUpdateRequest request, @PathVariable UUID id) {
         if (doctorRepository.existsById(id)) {

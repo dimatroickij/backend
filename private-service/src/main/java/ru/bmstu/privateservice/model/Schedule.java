@@ -35,7 +35,7 @@ public class Schedule {
 
     @Column(nullable = false)
     @NotNull
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIME)
     private Date endTime = new Date();
 
 }

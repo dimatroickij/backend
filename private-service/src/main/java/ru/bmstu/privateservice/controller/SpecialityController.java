@@ -1,6 +1,10 @@
 package ru.bmstu.privateservice.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +41,9 @@ public class SpecialityController {
     }
 
     @Operation(summary = "Добавление специальности", description = "Доступно для пользователей с ролью ADMIN")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Специальность добавлена",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Speciality.class))})})
     @PostMapping("/add")
     public Speciality add(@RequestBody @Valid String request) {
         Speciality speciality = new Speciality();

@@ -23,3 +23,9 @@ spring:
       properties:
         linger.ms: 20
         max.request.size: 104857600
+
+springdoc:
+  api-docs:
+    path: /openapi.json
+  swagger-ui:
+    path: /openapi.html

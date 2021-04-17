@@ -6,7 +6,7 @@
     <groupId>ru.bmstu</groupId>
     <artifactId>appointment</artifactId>
     <version>1.0.0</version>
-    <name>appointment</name>
+<!--    <name>appointment</name>-->
     <packaging>pom</packaging>
 
     <properties>

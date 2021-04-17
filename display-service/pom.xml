@@ -10,7 +10,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>ru.bmstu</groupId>
+    <groupId>ru.bmstu.appointment</groupId>
     <artifactId>display-service</artifactId>
     <version>1.0.0</version>
     <name>display-service</name>

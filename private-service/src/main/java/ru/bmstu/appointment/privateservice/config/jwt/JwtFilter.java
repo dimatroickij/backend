@@ -6,8 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
-import ru.bmstu.appointment.privateservice.config.CustomUserDetails;
-import ru.bmstu.appointment.privateservice.config.CustomUserDetailsService;
+import ru.bmstu.appointment.commonmodel.config.*;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

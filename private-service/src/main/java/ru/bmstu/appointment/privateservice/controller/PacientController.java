@@ -8,11 +8,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.bmstu.appointment.privateservice.dto.PacientRequest;
-import ru.bmstu.appointment.privateservice.dto.PacientResponse;
-import ru.bmstu.appointment.privateservice.model.Pacient;
-import ru.bmstu.appointment.privateservice.repository.PacientRepository;
-import ru.bmstu.appointment.privateservice.utils.PacientMapping;
+import ru.bmstu.appointment.commonmodel.model.Pacient;
+import ru.bmstu.appointment.commonmodel.repository.PacientRepository;
+import ru.bmstu.appointment.commonmodel.dto.PacientRequest;
+import ru.bmstu.appointment.commonmodel.dto.PacientResponse;
+import ru.bmstu.appointment.commonmodel.repository.UserRepository;
+import ru.bmstu.appointment.commonmodel.utils.PacientMapping;
 
 import javax.validation.Valid;
 import java.text.ParseException;
@@ -25,11 +26,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/pacient")
 @Tag(name = "Pacient", description = "Работа с данными пациентов")
 public class PacientController {
+
     @Autowired
     private PacientRepository pacientRepository;
 
-//    @Autowired
-//    private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private PacientMapping pacientMapping;
@@ -60,6 +62,10 @@ public class PacientController {
     @PostMapping("/add")
     public PacientResponse add(@RequestBody @Valid PacientRequest request) throws ParseException {
         Pacient pacient = new Pacient();
+        return getPacientResponse(request, pacient);
+    }
+
+    private PacientResponse getPacientResponse(@RequestBody @Valid PacientRequest request, Pacient pacient) throws ParseException {
         pacient.setSurName(request.getSurName());
         pacient.setName(request.getName());
         pacient.setMiddleName(request.getMiddleName());
@@ -79,13 +85,7 @@ public class PacientController {
     public PacientResponse update(@RequestBody PacientRequest request, @PathVariable UUID id) throws ParseException {
         if (pacientRepository.existsById(id)) {
             Pacient pacient = pacientRepository.getOne(id);
-            pacient.setSurName(request.getSurName());
-            pacient.setName(request.getName());
-            pacient.setMiddleName(request.getMiddleName());
-            pacient.setBirthDay(new SimpleDateFormat("dd.MM.yyyy").parse(request.getBirthDay()));
-            pacient.setPolicy(request.getPolicy());
-            pacientRepository.save(pacient);
-            return pacientMapping.mapToPacient(pacient);
+            return getPacientResponse(request, pacient);
         }
         return null;
     }

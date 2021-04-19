@@ -10,8 +10,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-import ru.bmstu.appointment.privateservice.model.Speciality;
-import ru.bmstu.appointment.privateservice.repository.SpecialityRepository;
+import ru.bmstu.appointment.commonmodel.model.Speciality;
+import ru.bmstu.appointment.commonmodel.repository.SpecialityRepository;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -20,6 +20,7 @@ import java.util.List;
 @RequestMapping("/speciality")
 @Tag(name = "Speciality", description = "Работа со специальностями работников")
 public class SpecialityController {
+
     @Autowired
     private SpecialityRepository specialityRepository;
 
@@ -56,7 +57,7 @@ public class SpecialityController {
     @PutMapping("/update/{id}")
     public String update(@RequestBody String request, @PathVariable Long id) {
         if (specialityRepository.existsById(id)) {
-            Speciality speciality = new Speciality();
+            Speciality speciality = specialityRepository.getOne(id);
             speciality.setName(request);
             specialityRepository.save(speciality);
             return speciality.getName();

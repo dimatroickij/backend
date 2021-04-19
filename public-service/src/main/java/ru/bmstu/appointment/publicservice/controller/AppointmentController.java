@@ -6,18 +6,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.bmstu.appointment.publicservice.model.Pacient;
-import ru.bmstu.appointment.publicservice.repository.AppointmentRepository;
-import ru.bmstu.appointment.publicservice.repository.PacientRepository;
-import ru.bmstu.appointment.publicservice.repository.ScheduleRepository;
-import ru.bmstu.appointment.publicservice.dto.AppointmentRequest;
-import ru.bmstu.appointment.publicservice.dto.AppointmentResponse;
-import ru.bmstu.appointment.publicservice.model.Appointment;
-import ru.bmstu.appointment.publicservice.utils.AppointmentMapping;
+import ru.bmstu.appointment.commonmodel.model.Appointment;
+import ru.bmstu.appointment.commonmodel.dto.AppointmentRequest;
+import ru.bmstu.appointment.commonmodel.dto.AppointmentResponse;
+import ru.bmstu.appointment.commonmodel.model.Pacient;
+import ru.bmstu.appointment.commonmodel.repository.AppointmentRepository;
+import ru.bmstu.appointment.commonmodel.repository.PacientRepository;
+import ru.bmstu.appointment.commonmodel.repository.ScheduleRepository;
+import ru.bmstu.appointment.commonmodel.utils.AppointmentMapping;
 
 import javax.validation.Valid;
 import java.text.ParseException;
@@ -29,12 +30,16 @@ import java.util.Date;
 @Tag(name = "Appointment", description = "Операции с записями пациентов к врачу")
 public class AppointmentController {
 
+    @Autowired
     private AppointmentRepository appointmentRepository;
 
+    @Autowired
     private ScheduleRepository scheduleRepository;
 
+    @Autowired
     private PacientRepository pacientRepository;
 
+    @Autowired
     private AppointmentMapping appointmentMapping;
 
     @Operation(summary = "Создание записи на приём к врачу")

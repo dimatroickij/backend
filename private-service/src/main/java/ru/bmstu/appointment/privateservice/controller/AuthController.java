@@ -11,19 +11,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.bmstu.appointment.privateservice.dto.AuthRequest;
-import ru.bmstu.appointment.privateservice.dto.AuthResponse;
-import ru.bmstu.appointment.privateservice.dto.RegistrationRequest;
-import ru.bmstu.appointment.privateservice.dto.RegistrationResponse;
-import ru.bmstu.appointment.privateservice.model.User;
 import ru.bmstu.appointment.privateservice.config.jwt.JwtProvider;
-import ru.bmstu.appointment.privateservice.service.UserService;
+import ru.bmstu.appointment.commonmodel.dto.AuthRequest;
+import ru.bmstu.appointment.commonmodel.dto.AuthResponse;
+import ru.bmstu.appointment.commonmodel.dto.RegistrationRequest;
+import ru.bmstu.appointment.commonmodel.dto.RegistrationResponse;
+import ru.bmstu.appointment.commonmodel.model.User;
+import ru.bmstu.appointment.commonmodel.service.UserService;
 
 import javax.validation.Valid;
 
 @RestController
 @Tag(name = "Authorization", description = "Авторизация / регистрация в системе")
 public class AuthController {
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -60,6 +61,6 @@ public class AuthController {
     public AuthResponse auth(@RequestBody AuthRequest request) {
         User user = userService.findByUsernameAndPassword(request.getUsername(), request.getPassword());
         String token = jwtProvider.generateToken(user.getUsername());
-        return new AuthResponse(token, user.getRole());
+        return new AuthResponse(token, user.getUsername(), user.getRole());
     }
 }

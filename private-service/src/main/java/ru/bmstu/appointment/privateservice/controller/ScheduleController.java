@@ -9,12 +9,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.bmstu.appointment.privateservice.dto.ScheduleRequest;
-import ru.bmstu.appointment.privateservice.dto.ScheduleResponse;
-import ru.bmstu.appointment.privateservice.model.Schedule;
-import ru.bmstu.appointment.privateservice.repository.DoctorRepository;
-import ru.bmstu.appointment.privateservice.repository.ScheduleRepository;
-import ru.bmstu.appointment.privateservice.utils.ScheduleMapping;
+import ru.bmstu.appointment.commonmodel.dto.ScheduleRequest;
+import ru.bmstu.appointment.commonmodel.dto.ScheduleResponse;
+import ru.bmstu.appointment.commonmodel.model.Schedule;
+import ru.bmstu.appointment.commonmodel.repository.DoctorRepository;
+import ru.bmstu.appointment.commonmodel.repository.ScheduleRepository;
+import ru.bmstu.appointment.commonmodel.utils.ScheduleMapping;
 
 import javax.validation.Valid;
 import java.text.ParseException;
@@ -81,7 +81,7 @@ public class ScheduleController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Расписание изменено",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ScheduleResponse.class))})})
-    @PostMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     public ScheduleResponse update(@RequestBody @Valid ScheduleRequest request, @PathVariable UUID id) throws ParseException {
         if (scheduleRepository.existsById(id)) {
             Schedule schedule = scheduleRepository.getOne(id);

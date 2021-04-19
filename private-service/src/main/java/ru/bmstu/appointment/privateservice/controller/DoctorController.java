@@ -9,16 +9,16 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.bmstu.appointment.privateservice.dto.DoctorRequest;
-import ru.bmstu.appointment.privateservice.dto.DoctorResponse;
-import ru.bmstu.appointment.privateservice.dto.DoctorUpdateRequest;
-import ru.bmstu.appointment.privateservice.model.Doctor;
-import ru.bmstu.appointment.privateservice.model.User;
-import ru.bmstu.appointment.privateservice.repository.DoctorRepository;
-import ru.bmstu.appointment.privateservice.repository.SpecialityRepository;
-import ru.bmstu.appointment.privateservice.repository.UserRepository;
-import ru.bmstu.appointment.privateservice.service.UserService;
-import ru.bmstu.appointment.privateservice.utils.DoctorMapping;
+import ru.bmstu.appointment.commonmodel.dto.DoctorRequest;
+import ru.bmstu.appointment.commonmodel.dto.DoctorResponse;
+import ru.bmstu.appointment.commonmodel.dto.DoctorUpdateRequest;
+import ru.bmstu.appointment.commonmodel.model.Doctor;
+import ru.bmstu.appointment.commonmodel.model.User;
+import ru.bmstu.appointment.commonmodel.repository.DoctorRepository;
+import ru.bmstu.appointment.commonmodel.repository.SpecialityRepository;
+import ru.bmstu.appointment.commonmodel.repository.UserRepository;
+import ru.bmstu.appointment.commonmodel.service.UserService;
+import ru.bmstu.appointment.commonmodel.utils.DoctorMapping;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/doctor")
 @Tag(name = "Doctor", description = "Операции с данными работников")
 public class DoctorController {
+
     @Autowired
     private DoctorRepository doctorRepository;
 

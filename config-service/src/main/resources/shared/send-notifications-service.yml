@@ -38,3 +38,9 @@ mail-sender:
   send-to: ${EMAIL_SEND_TO}
   resend-delay-per-error-in-minute: 1
   resend-delay-limit: 240
+
+springdoc:
+  api-docs:
+    path: /openapi.json
+  swagger-ui:
+    path: /openapi.html

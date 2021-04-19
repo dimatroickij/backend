@@ -13,16 +13,16 @@
 ##Просмотр созданных запросов
 * JSON конфигурация OpenAPI:
     + http://localhost:8080/openapi.json - private-service
-    + http://localhost:8080/openapi.json - public-service
-    + http://localhost:8080/openapi.json - display-service
-    + http://localhost:8080/openapi.json - send-notification-service
+    + http://localhost:8081/openapi.json - public-service
+    + http://localhost:8082/openapi.json - display-service
+    + http://localhost:8083/openapi.json - send-notification-service
 
 
 * HTML конфигурация OpenAPI:
   + http://localhost:8080/openapi.html - private-service
-  + http://localhost:8080/openapi.html - public-service
-  + http://localhost:8080/openapi.html - display-service
-  + http://localhost:8080/openapi.html - send-notification-service
+  + http://localhost:8081/openapi.html - public-service
+  + http://localhost:8082/openapi.html - display-service
+  + http://localhost:8083/openapi.html - send-notification-service
     
 ##Список сервисов и портов:
 * PostgreSQL = 5432

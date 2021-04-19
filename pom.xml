@@ -15,6 +15,7 @@
     </properties>
 
     <modules>
+        <module>common-model</module>
         <module>config-service</module>
         <module>private-service</module>
         <module>public-service</module>

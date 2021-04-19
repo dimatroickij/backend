@@ -1,2 +1,8 @@
 server:
   port: ${SERVER_PORT:8082}
+
+springdoc:
+  api-docs:
+    path: /openapi.json
+  swagger-ui:
+    path: /openapi.html

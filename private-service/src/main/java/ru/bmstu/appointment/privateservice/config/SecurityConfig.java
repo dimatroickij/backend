@@ -15,6 +15,7 @@ import ru.bmstu.appointment.privateservice.config.jwt.JwtFilter;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private JwtFilter jwtFilter;
 

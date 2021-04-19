@@ -12,6 +12,9 @@ spring:
   datasource:
     hikari:
       maximumPoolSize: 5
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    default-schema: liquibase_db
 
 springdoc:
   api-docs:

@@ -13,6 +13,7 @@ import java.util.UUID;
 @Entity
 @Data
 @NoArgsConstructor
+@Table(name = "schedule", schema = "public")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Schedule {
 

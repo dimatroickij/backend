@@ -1,0 +1,2 @@
+CREATE SCHEMA IF NOT EXISTS "liquibase_db";
+CREATE SCHEMA IF NOT EXISTS "public";

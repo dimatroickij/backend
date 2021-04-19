@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", schema = "public")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

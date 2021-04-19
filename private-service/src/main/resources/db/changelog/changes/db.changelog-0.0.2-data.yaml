@@ -1,0 +1,421 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1618854651-1
+      author: dimatroickij
+      comment: "Создание ролей"
+      changes:
+        - insert:
+            tableName: role
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "ROLE_ADMIN"
+        - insert:
+            tableName: role
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "ROLE_DOCTOR"
+        - insert:
+            tableName: role
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "ROLE_USER"
+      rollback:
+        - delete:
+            tableName: role
+            schemaName: public
+            where: name in ('ROLE_ADMIN', 'ROLE_DOCTOR', 'ROLE_USER');
+  - changeSet:
+      id: 1618854651-2
+      author: dimatroickij
+      comment: "Создание специальностей"
+      changes:
+        - insert:
+            tableName: speciality
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Стоматолог"
+        - insert:
+            tableName: speciality
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Хирург"
+        - insert:
+            tableName: speciality
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Офтальмолог"
+        - insert:
+            tableName: speciality
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Терапевт"
+        - insert:
+            tableName: speciality
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Оториноларинголог"
+      rollback:
+        - delete:
+            tableName: speciality
+            schemaName: public
+            where: name in ('Стоматолог', 'Хирург', 'Офтальмолог', 'Терапевт', 'Оториноларинголог');
+  - changeSet:
+      id: 1618854651-3
+      author: dimatroickij
+      comment: "Создание пользователей"
+      changes:
+        - insert:
+            tableName: users
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  value: ea062682-7f4d-4591-a4b0-ed14c6d0f89d
+              - column:
+                  name: email
+                  value: admin@admin.ru
+              - column:
+                  name: password
+                  value: $2y$10$JOpHVvpPBSxQtgWZn9vtwe8tFHNKPPZRUews7kU.QqGBaYSvTQbim
+              - column:
+                  name: username
+                  value: admin
+              - column:
+                  name: role_id
+                  value: 1
+        - insert:
+            tableName: users
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  value: ab29ec7f-6dfb-4608-a320-c7a4d6c454e3
+              - column:
+                  name: email
+                  value: doctor1@doctor.ru
+              - column:
+                  name: password
+                  value: $2y$10$ULF5IZCV5JrxgtdhJT7f.u7er2r7hTY7xCydp.9dAv5UFBC0CclCi
+              - column:
+                  name: username
+                  value: doctor1
+              - column:
+                  name: role_id
+                  value: 2
+        - insert:
+            tableName: users
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  value: 6f1993a1-b4c3-4d1e-a3c3-11235f73437b
+              - column:
+                  name: email
+                  value: doctor2@doctor.ru
+              - column:
+                  name: password
+                  value: $2y$10$GcJ0bIqvs7u5Nem4pmPv2ek1WAXtIWf4ckfL35oblmKw7FQWVkdGS
+              - column:
+                  name: username
+                  value: doctor2
+              - column:
+                  name: role_id
+                  value: 2
+        - insert:
+            tableName: users
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  value: eb2bc39f-b9b7-4fce-8e09-bae6a4f41a5b
+              - column:
+                  name: email
+                  value: doctor3@doctor.ru
+              - column:
+                  name: password
+                  value: $2y$10$LkK0tjbHpYz/yHOqyzDcO.uu3nUDP8SR7zcyLmiBjIokQTj8MLaEa
+              - column:
+                  name: username
+                  value: doctor3
+              - column:
+                  name: role_id
+                  value: 2
+        - insert:
+            tableName: users
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  value: 2abf3725-b3e9-4ef5-b0f3-f23942836824
+              - column:
+                  name: email
+                  value: doctor4@doctor.ru
+              - column:
+                  name: password
+                  value: $2y$10$gWhjgXzj9mwt.rHPsZi6debwT0SSWH9QN2L.JBQK568n2Xz/40NX6
+              - column:
+                  name: username
+                  value: doctor4
+              - column:
+                  name: role_id
+                  value: 2
+        - insert:
+            tableName: users
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  value: c6c34236-7f55-450d-86c1-2b74220131f4
+              - column:
+                  name: email
+                  value: doctor5@doctor.ru
+              - column:
+                  name: password
+                  value: $2y$10$Py50YeyQHrqp1/APIxdEmeMyOupPYUNgrmsVrHyGHAn4GzxPxaYCK
+              - column:
+                  name: username
+                  value: doctor5
+              - column:
+                  name: role_id
+                  value: 2
+      rollback:
+        - delete:
+            tableName: users
+            schemaName: public
+            where: email in ('admin@admin.ru', 'doctor1@doctor.ru', 'doctor2@doctor.ru', 'doctor3@doctor.ru', 'doctor4@doctor.ru', 'doctor5@doctor.ru');
+  - changeSet:
+      id: 1618854651-4
+      author: dimatroickij
+      comment: "Создание докторов"
+      changes:
+        - insert:
+            tableName: doctor
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  value: 27fbb8d4-686a-4099-87e1-cf7118f1f3eb
+              - column:
+                  name: sur_name
+                  value: Иванов
+              - column:
+                  name: name
+                  value: Иван
+              - column:
+                  name: middle_name
+                  value: Иванович
+              - column:
+                  name: speciality_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: ab29ec7f-6dfb-4608-a320-c7a4d6c454e3
+              - column:
+                  name: cabinet
+                  value: 101
+        - insert:
+            tableName: doctor
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  value: b2a07ca7-4f8d-4806-8a14-fc0835984f3f
+              - column:
+                  name: sur_name
+                  value: Иванова
+              - column:
+                  name: name
+                  value: Наталья
+              - column:
+                  name: middle_name
+                  value: Ивановна
+              - column:
+                  name: speciality_id
+                  value: 2
+              - column:
+                  name: user_id
+                  value: 6f1993a1-b4c3-4d1e-a3c3-11235f73437b
+              - column:
+                  name: cabinet
+                  value: 202
+        - insert:
+            tableName: doctor
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  value: 76390437-1843-4d46-95d2-c8efbbd0c45e
+              - column:
+                  name: sur_name
+                  value: Петров
+              - column:
+                  name: name
+                  value: Иван
+              - column:
+                  name: middle_name
+                  value: Иванович
+              - column:
+                  name: speciality_id
+                  value: 3
+              - column:
+                  name: user_id
+                  value: eb2bc39f-b9b7-4fce-8e09-bae6a4f41a5b
+              - column:
+                  name: cabinet
+                  value: 303
+        - insert:
+            tableName: doctor
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  value: 392bf1e2-5ef1-4b7f-a2ff-02b62e5b0e29
+              - column:
+                  name: sur_name
+                  value: Петрова
+              - column:
+                  name: name
+                  value: Мария
+              - column:
+                  name: middle_name
+                  value: Алексеевна
+              - column:
+                  name: speciality_id
+                  value: 4
+              - column:
+                  name: user_id
+                  value: 2abf3725-b3e9-4ef5-b0f3-f23942836824
+              - column:
+                  name: cabinet
+                  value: 404
+        - insert:
+            tableName: doctor
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  value: a3261c20-ced5-43d4-96b0-4e8c001f63a4
+              - column:
+                  name: sur_name
+                  value: Иванов
+              - column:
+                  name: name
+                  value: Александр
+              - column:
+                  name: middle_name
+                  value: Анатольевич
+              - column:
+                  name: speciality_id
+                  value: 5
+              - column:
+                  name: user_id
+                  value: c6c34236-7f55-450d-86c1-2b74220131f4
+              - column:
+                  name: cabinet
+                  value: 505
+      rollback:
+        - delete:
+            tableName: doctor
+            schemaName: public
+            where: speciality_id in (1, 2, 3, 4, 5);
+  - changeSet:
+      id: 1618854651-5
+      author: dimatroickij
+      comment: "Создание пациентов"
+      changes:
+        - insert:
+            tableName: pacient
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  value: 00dda624-a5e1-46f2-8390-ce97b6a1f13f
+              - column:
+                  name: sur_name
+                  value: Козлова
+              - column:
+                  name: name
+                  value: Софья
+              - column:
+                  name: middle_name
+                  value: Адамовна
+              - column:
+                  name: birth_day
+                  value: 1981-06-12
+              - column:
+                  name: policy
+                  value: 4501983082700496
+              - column:
+                  name: user_id
+                  value:
+        - insert:
+            tableName: pacient
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  value: 515b79b3-5894-417e-996e-5d4ff238b24d
+              - column:
+                  name: sur_name
+                  value: Афанасьева
+              - column:
+                  name: name
+                  value: Татьяна
+              - column:
+                  name: middle_name
+                  value: Васильевна
+              - column:
+                  name: birth_day
+                  value: 2001-04-13
+              - column:
+                  name: policy
+                  value: 6801989072040795
+              - column:
+                  name: user_id
+                  value:
+        - insert:
+            tableName: pacient
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  value: c5daed0b-63dc-4109-adf7-e44e11e61806
+              - column:
+                  name: sur_name
+                  value: Галкин
+              - column:
+                  name: name
+                  value: Владимир
+              - column:
+                  name: middle_name
+                  value: Артёмович
+              - column:
+                  name: birth_day
+                  value: 2004-03-15
+              - column:
+                  name: policy
+                  value: 1521989010652727
+              - column:
+                  name: user_id
+                  value:
+      rollback:
+        - delete:
+            tableName: pacient
+            schemaName: public
+            where: id in ('00dda624-a5e1-46f2-8390-ce97b6a1f13f', '515b79b3-5894-417e-996e-5d4ff238b24d', 'c5daed0b-63dc-4109-adf7-e44e11e61806');

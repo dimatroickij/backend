@@ -12,6 +12,7 @@ import java.util.UUID;
 @Entity
 @Data
 @NoArgsConstructor
+@Table(name = "pacient", schema = "public")
 public class Pacient {
 
     @Id

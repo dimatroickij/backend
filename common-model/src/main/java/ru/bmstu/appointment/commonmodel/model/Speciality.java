@@ -14,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
+@Table(name = "speciality", schema = "public")
 public class Speciality {
 
     @Id

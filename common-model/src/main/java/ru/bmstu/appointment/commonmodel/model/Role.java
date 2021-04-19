@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "role", schema = "public")
 public class Role {
 
     @Id

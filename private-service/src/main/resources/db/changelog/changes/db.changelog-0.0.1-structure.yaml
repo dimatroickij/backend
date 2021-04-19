@@ -1,0 +1,384 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1618863121744-20
+      author: dimatroickij (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: role_pkey
+                  name: id
+                  type: BIGSERIAL
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(20)
+            schemaName: public
+            tableName: role
+  - changeSet:
+      id: 1618863121744-21
+      author: dimatroickij (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: speciality_pkey
+                  name: id
+                  type: BIGSERIAL
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+            schemaName: public
+            tableName: speciality
+  - changeSet:
+      id: 1618863121744-22
+      author: dimatroickij (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: users_pkey
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: username
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: role_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: password
+                  type: VARCHAR(255)
+            schemaName: public
+            tableName: users
+  - changeSet:
+      id: 1618863121744-23
+      author: dimatroickij (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: doctor_pkey
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: sur_name
+                  type: VARCHAR(20)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(20)
+              - column:
+                  name: middle_name
+                  type: VARCHAR(20)
+              - column:
+                  name: speciality_id
+                  type: BIGINT
+              - column:
+                  name: user_id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: cabinet
+                  type: VARCHAR(255)
+            schemaName: public
+            tableName: doctor
+  - changeSet:
+      id: 1618863121744-24
+      author: dimatroickij (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pacient_pkey
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: sur_name
+                  type: VARCHAR(20)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(20)
+              - column:
+                  name: middle_name
+                  type: VARCHAR(20)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: birth_day
+                  type: date
+              - column:
+                  constraints:
+                    nullable: false
+                  name: policy
+                  type: VARCHAR(16)
+              - column:
+                  name: user_id
+                  type: UUID
+            schemaName: public
+            tableName: pacient
+  - changeSet:
+      id: 1618863121744-25
+      author: dimatroickij (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: schedule_pkey
+                  name: id
+                  type: UUID
+              - column:
+                  name: doctor_id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: date
+                  type: date
+              - column:
+                  constraints:
+                    nullable: false
+                  name: start_time
+                  type: TIME WITHOUT TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: end_time
+                  type: TIME WITHOUT TIME ZONE
+            schemaName: public
+            tableName: schedule
+  - changeSet:
+      id: 1618863121744-26
+      author: dimatroickij (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: appointment_pkey
+                  name: id
+                  type: UUID
+              - column:
+                  name: pacient_id
+                  type: UUID
+              - column:
+                  name: schedule_id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: date_record
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_active
+                  type: BOOLEAN
+            schemaName: public
+            tableName: appointment
+  - changeSet:
+      id: 1618863121744-27
+      author: dimatroickij (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: uk_8sewwnpamngi6b1dwaa88askk
+            schemaName: public
+            tableName: role
+  - changeSet:
+      id: 1618863121744-28
+      author: dimatroickij (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: uk_8qj7x0ghabtyv3102vy037tg5
+            schemaName: public
+            tableName: speciality
+  - changeSet:
+      id: 1618863121744-29
+      author: dimatroickij (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: username
+            constraintName: uk_r43af9ap4edm43mmtq01oddj6
+            schemaName: public
+            tableName: users
+  - changeSet:
+      id: 1618863121744-30
+      author: dimatroickij (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: email
+            constraintName: uk_6dotkott2kjsp8vw4d0m25fb7
+            schemaName: public
+            tableName: users
+  - changeSet:
+      id: 1618863121744-31
+      author: dimatroickij (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: users
+            baseTableSchemaName: public
+            constraintName: fk4qu1gr772nnf6ve5af002rwya
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: role
+            referencedTableSchemaName: public
+            validate: true
+  - changeSet:
+      id: 1618863121744-32
+      author: dimatroickij (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: doctor
+            baseTableSchemaName: public
+            constraintName: fk11wrxiolc8qa2e64s32xc2yy4
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: users
+            referencedTableSchemaName: public
+            validate: true
+  - changeSet:
+      id: 1618863121744-33
+      author: dimatroickij (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: speciality_id
+            baseTableName: doctor
+            baseTableSchemaName: public
+            constraintName: fkdht1k3ou6ody790hip20bl9dx
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: speciality
+            referencedTableSchemaName: public
+            validate: true
+  - changeSet:
+      id: 1618863121744-34
+      author: dimatroickij (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: policy
+            constraintName: uk_k4vtoyywghy6rmav5m17f67fu
+            schemaName: public
+            tableName: pacient
+  - changeSet:
+      id: 1618863121744-35
+      author: dimatroickij (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: pacient
+            baseTableSchemaName: public
+            constraintName: fkcnbtdq1r08rkg974yhwxti2s4
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: users
+            referencedTableSchemaName: public
+            validate: true
+  - changeSet:
+      id: 1618863121744-36
+      author: dimatroickij (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: doctor_id
+            baseTableName: schedule
+            baseTableSchemaName: public
+            constraintName: fkqixlhugy7jvrwut9o2s6hqnu8
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: doctor
+            referencedTableSchemaName: public
+            validate: true
+  - changeSet:
+      id: 1618863121744-37
+      author: dimatroickij (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: schedule_id
+            baseTableName: appointment
+            baseTableSchemaName: public
+            constraintName: appointment_fk
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: CASCADE
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: schedule
+            referencedTableSchemaName: public
+            validate: true
+  - changeSet:
+      id: 1618863121744-38
+      author: dimatroickij (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: pacient_id
+            baseTableName: appointment
+            baseTableSchemaName: public
+            constraintName: appointment_fk_1
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: CASCADE
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: pacient
+            referencedTableSchemaName: public
+            validate: true

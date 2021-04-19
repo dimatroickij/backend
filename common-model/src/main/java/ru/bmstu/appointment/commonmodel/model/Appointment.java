@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
@@ -33,6 +34,11 @@ public class Appointment {
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     private Date dateRecord = new Date();
+
+//    @Column(unique = true, nullable = false)
+//    @NotNull
+//    @Email(regexp=".*@.*\\..*", message = "Почта должна быть действующей")
+//    private String email;
 
     @Column(nullable = false)
     private Boolean isActive = true;

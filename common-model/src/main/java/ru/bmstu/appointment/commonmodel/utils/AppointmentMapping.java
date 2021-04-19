@@ -10,9 +10,10 @@ public class AppointmentMapping {
     public AppointmentResponse mapToAppointment(Appointment appointment){
         AppointmentResponse dto = new AppointmentResponse();
         dto.setId(appointment.getId());
-//        dto.setPacient(appointment.getPacient());
-//        dto.setSchedule(appointment.getSchedule());
+        dto.setPacient(new PacientMapping().mapToPacient(appointment.getPacient()));
+        dto.setSchedule(new ScheduleMapping().mapToSchedule(appointment.getSchedule()));
         dto.setDateRecord(appointment.getDateRecord());
+//        dto.setEmail(appointment.getEmail());
         return dto;
     }
 }

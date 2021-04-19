@@ -1,5 +1,6 @@
 package ru.bmstu.appointment.commonmodel.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Entity
 @Data
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Schedule {
 
     @Id

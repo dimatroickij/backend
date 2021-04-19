@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EntityScan(basePackages = "ru.bmstu.appointment.commonmodel.model")
-@EnableJpaRepositories(basePackages = {"ru.bmstu.appointment.commonmodel"})//, "ru.bmstu.appointment.publicservice"})
-@SpringBootApplication(scanBasePackages = {"ru.bmstu.appointment.commonmodel"})//, "ru.bmstu.appointment.publicservice",
-//"ru.bmstu.appointment.privateservice"})
+@EnableJpaRepositories(basePackages = {"ru.bmstu.appointment.commonmodel"})
+@SpringBootApplication(scanBasePackages = {"ru.bmstu.appointment.commonmodel.utils",
+        "ru.bmstu.appointment.publicservice"})
 public class PublicServiceApplication {
 
     public static void main(String[] args) {

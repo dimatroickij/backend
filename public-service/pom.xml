@@ -61,17 +61,17 @@
             <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-            <version>2.4.4</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-security</artifactId>-->
+<!--            <version>2.4.4</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-taglibs</artifactId>
-            <version>5.4.5</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.security</groupId>-->
+<!--            <artifactId>spring-security-taglibs</artifactId>-->
+<!--            <version>5.4.5</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -115,11 +115,11 @@
             <artifactId>springdoc-openapi-data-rest</artifactId>
             <version>1.5.7</version>
         </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-security</artifactId>
-            <version>1.5.7</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springdoc</groupId>-->
+<!--            <artifactId>springdoc-openapi-security</artifactId>-->
+<!--            <version>1.5.7</version>-->
+<!--        </dependency>-->
 
         <!--KAFKA-->
         <dependency>
@@ -134,14 +134,21 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- PDF -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.4</version>
+        </dependency>
+
         <dependency>
             <groupId>ru.bmstu.appointment</groupId>
             <artifactId>common-model</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ru.bmstu.appointment</groupId>
-            <artifactId>private-service</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -93,9 +94,8 @@ public class AppointmentController {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType("application/pdf"));
 
-            ResponseEntity<InputStreamResource> response = new ResponseEntity<InputStreamResource>(
+            return new ResponseEntity<InputStreamResource>(
                     new InputStreamResource(getPDF(new AppointmentMapping().mapToAppointment(appointment))), headers, HttpStatus.OK);
-            return response;
         }
         return null;
     }
@@ -122,7 +122,8 @@ public class AppointmentController {
             appointment.setIsActive(true);
 //            appointment.setEmail(request.getEmail());
             appointmentRepository.save(appointment);
-            notificationProducer.sendMessageWithCallback(request.getEmail());
+
+            notificationProducer.sendMessageWithCallback(request.getEmail() + "###" + appointment.getId().toString());
             return appointmentMapping.mapToAppointment(appointment);
         }
         return null;
@@ -146,7 +147,8 @@ public class AppointmentController {
             appointment.setIsActive(true);
 //            appointment.setEmail(request.getEmail());
             appointmentRepository.save(appointment);
-            notificationProducer.sendMessageWithCallback(request.getEmail());
+
+            notificationProducer.sendMessageWithCallback(request.getEmail() + "###" + appointment.getId().toString());
             return appointmentMapping.mapToAppointment(appointment);
         }
         return null;

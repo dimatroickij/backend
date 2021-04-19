@@ -33,12 +33,6 @@ spring:
     listener:
       ack-mode: record
 
-mail-sender:
-  send-rate: 60000
-  send-to: ${EMAIL_SEND_TO}
-  resend-delay-per-error-in-minute: 1
-  resend-delay-limit: 240
-
 springdoc:
   api-docs:
     path: /openapi.json

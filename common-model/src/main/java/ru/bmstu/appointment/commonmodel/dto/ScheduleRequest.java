@@ -13,8 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ScheduleRequest {
 
-    @NotBlank
-    @Schema(description = "ID врача")
+    @Schema(description = "ID врача. Если асписание создаёт администратор, то поле должно быть заполнено ID врача.")
     private UUID doctor;
 
     @NotBlank

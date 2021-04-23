@@ -29,3 +29,5 @@ springdoc:
     path: /openapi.json
   swagger-ui:
     path: /openapi.html
+
+send-email: ${SEND_EMAIL:false}

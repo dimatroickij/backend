@@ -1,0 +1,66 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1619218595-1
+      author: dimatroickij
+      changes:
+        - addColumn:
+            tableName: doctor
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_active
+                  type: bool
+                  defaultValueBoolean: true
+            schemaName: public
+  - changeSet:
+      id: 1619218595-2
+      author: dimatroickij
+      changes:
+        - addColumn:
+            tableName: pacient
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_active
+                  type: bool
+                  defaultValueBoolean: true
+            schemaName: public
+  - changeSet:
+      id: 1619218595-3
+      author: dimatroickij
+      changes:
+        - addColumn:
+            tableName: schedule
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_active
+                  type: bool
+                  defaultValueBoolean: true
+            schemaName: public
+  - changeSet:
+      id: 1619218595-4
+      author: dimatroickij
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_active
+                  type: bool
+                  defaultValueBoolean: true
+            schemaName: public
+  - changeSet:
+      id: 1619218595-5
+      author: dimatroickij
+      changes:
+        - addDefaultValue:
+            tableName: appointment
+            columnName: is_active
+            defaultValueBoolean: true
+            schemaName: public

@@ -69,7 +69,7 @@ public class ScheduleController {
         return null;
     }
 
-    @Operation(summary = "Добавление записи в расписание", description = "Доступно для пользователей с ролью DOCTOR")
+    @Operation(summary = "Добавление записи в расписание", description = "Доступно для пользователей с ролью DOCTOR или ADMIN. Если запись добавляет врач, то поле ID врача будет заполнено автоматически")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Запись добавлена",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ScheduleResponse.class))})})
@@ -96,7 +96,7 @@ public class ScheduleController {
         return scheduleMapping.mapToSchedule(schedule);
     }
 
-    @Operation(summary = "Изменение записи", description = "Доступно для пользователей с ролью DOCTOR")
+    @Operation(summary = "Изменение записи", description = "Доступно для пользователей с ролью DOCTOR или ADMIN. Изменение доступно администратору и доктору, который создавал запись")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Расписание изменено",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ScheduleResponse.class))})})
@@ -116,7 +116,7 @@ public class ScheduleController {
     }
 
 
-    @Operation(summary = "Удаление записи", description = "Доступно для пользователей с ролью DOCTOR")
+    @Operation(summary = "Удаление записи", description = "Доступно для пользователей с ролью DOCTOR или ADMIN. Удалить может только врач, создавший запись или админ")
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable UUID id, HttpServletRequest request) {
         if (scheduleRepository.existsById(id)) {

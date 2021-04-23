@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/appointment")
 @Tag(name = "Appointment", description = "Операции с записями пациентов к врачу")
 public class AppointmentController {
+
+    @Value("${send-email}")
+    private boolean sendEmail;
 
     @Autowired
     private AppointmentRepository appointmentRepository;
@@ -119,11 +123,11 @@ public class AppointmentController {
                     new SimpleDateFormat("dd.MM.yyyy").parse(request.getBirthDay()),
                     request.getPolicy());
             appointment.setPacient(pacient);
-            appointment.setIsActive(true);
 //            appointment.setEmail(request.getEmail());
             appointmentRepository.save(appointment);
 
-            notificationProducer.sendMessageWithCallback(request.getEmail() + "###" + appointment.getId().toString());
+            if (sendEmail)
+                notificationProducer.sendMessageWithCallback(request.getEmail() + "###" + appointment.getId().toString());
             return appointmentMapping.mapToAppointment(appointment);
         }
         return null;
@@ -144,11 +148,11 @@ public class AppointmentController {
             appointment.setPacient(lastAppointment.getPacient());
             appointment.setSchedule(scheduleRepository.getOne(request.getSchedule()));
             appointment.setDateRecord(new Date());
-            appointment.setIsActive(true);
 //            appointment.setEmail(request.getEmail());
             appointmentRepository.save(appointment);
 
-            notificationProducer.sendMessageWithCallback(request.getEmail() + "###" + appointment.getId().toString());
+            if (sendEmail)
+                notificationProducer.sendMessageWithCallback(request.getEmail() + "###" + appointment.getId().toString());
             return appointmentMapping.mapToAppointment(appointment);
         }
         return null;

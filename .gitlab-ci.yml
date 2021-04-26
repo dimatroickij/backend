@@ -44,7 +44,8 @@ docker:
   script:
   - buildah login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
   - >
-    for service_name in $(ls *-service -d); do
+    # for service_name in $(ls *-service -d); do
+    for service_name in config-service private-service; do
       export SERVICE_NAME=$service_name
       export IMAGE_TAG=${CI_REGISTRY_IMAGE}/${SERVICE_NAME}:${CI_COMMIT_SHORT_SHA}
       buildah --storage-driver=vfs bud -t ${IMAGE_TAG} ${SERVICE_NAME}
@@ -56,7 +57,8 @@ envsubst on staging:
   image: cr.yandex/crp5dhuuq8q568nh0cf0:envsubs
   script:
   - >
-    for ci_k8s_file in ./*-service/ci-k8s.yaml; do
+    # for ci_k8s_file in ./*-service/ci-k8s.yaml; do
+    for ci_k8s_file in ./config-service/ci-k8s.yaml ./private-service/ci-k8s.yaml; do
       dirname=${ci_k8s_file%/ci-k8s.yaml}
       export SERVICE_NAME=${dirname#./}
       export IMAGE_TAG=${CI_REGISTRY_IMAGE}/${SERVICE_NAME}:${CI_COMMIT_SHORT_SHA}

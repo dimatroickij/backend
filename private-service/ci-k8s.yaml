@@ -24,6 +24,8 @@ spec:
           value: "${SERVER_PORT}"
         - name: SERVER_PORT
           value: "${SERVER_PORT}"
+        - name: SERVER_SERVLET_CONTEXT_PATH
+          value: "${PATH_PREFIX}${SERVICE_NAME}/"
         - name: CONFIG_USER
           value: "${CONFIG_USER}"
         - name: CONFIG_PASS

@@ -15,6 +15,7 @@ import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -73,11 +74,61 @@ public class AppointmentController {
     private NotificationProducer notificationProducer;
 
     @SecurityRequirements
-    @Operation(summary = "Список записей")
+    @Operation(summary = "Список записей в зависимости от заданных фильтров",
+            description = "Для получения списка записей на определенный день заполните startDate и endDate этой датой")
     @GetMapping("/all")
-    public List<AppointmentResponse> all() {
-        return appointmentRepository.findAll().stream().map(appointmentMapping::mapToAppointment)
-                .collect(Collectors.toList());
+    public List<AppointmentResponse> all(@RequestParam(required = false) UUID idDoctor,
+                                         @RequestParam(required = false)
+                                         @Schema(type = "string",
+                                                 pattern = "^(0[1-9]|[12][0-9]|3[01])\\.(0[1-9]|1[012]).\\d{4}$",
+                                                 example = "dd.MM.yyyy") String startDate,
+                                         @RequestParam(required = false)
+                                         @Schema(type = "string",
+                                                 pattern = "^(0[1-9]|[12][0-9]|3[01])\\.(0[1-9]|1[012]).\\d{4}$",
+                                                 example = "dd.MM.yyyy") String endDate) throws ParseException {
+
+        if (idDoctor == null && startDate == null && endDate == null)
+            return appointmentRepository.findByIsActiveTrue(Sort.by("schedule_date", "schedule_startTime")).stream()
+                    .map(appointmentMapping::mapToAppointment).collect(Collectors.toList());
+
+        if (idDoctor == null && startDate == null)
+            return appointmentRepository.findByIsActiveTrueAndScheduleDateBefore(
+                    new SimpleDateFormat("dd.MM.yyyy").parse(endDate),
+                    Sort.by("schedule_date", "schedule_startTime")).stream().map(appointmentMapping::mapToAppointment)
+                    .collect(Collectors.toList());
+
+        if (idDoctor == null && endDate == null)
+            return appointmentRepository.findByIsActiveTrueAndScheduleDateAfter(
+                    new SimpleDateFormat("dd.MM.yyyy").parse(startDate),
+                    Sort.by("schedule_date", "schedule_startTime")).stream().map(appointmentMapping::mapToAppointment)
+                    .collect(Collectors.toList());
+
+        if (idDoctor == null)
+            return appointmentRepository.findByIsActiveTrueAndScheduleDateBetween(
+                    new SimpleDateFormat("dd.MM.yyyy").parse(startDate),
+                    new SimpleDateFormat("dd.MM.yyyy").parse(endDate),
+                    Sort.by("schedule_date", "schedule_startTime")).stream().map(appointmentMapping::mapToAppointment)
+                    .collect(Collectors.toList());
+
+        if (startDate == null && endDate == null)
+            return appointmentRepository.findByIsActiveTrueAndScheduleDoctorId(idDoctor,
+                    Sort.by("schedule_date", "schedule_startTime")).stream().map(appointmentMapping::mapToAppointment)
+                    .collect(Collectors.toList());
+
+        if (startDate == null)
+            return appointmentRepository.findByIsActiveTrueAndScheduleDoctorIdAndScheduleDateBefore(idDoctor,
+                    new SimpleDateFormat("dd.MM.yyyy").parse(endDate), Sort.by("schedule_date", "schedule_startTime")).
+                    stream().map(appointmentMapping::mapToAppointment).collect(Collectors.toList());
+
+        if (endDate == null)
+            return appointmentRepository.findByIsActiveTrueAndScheduleDoctorIdAndScheduleDateAfter(idDoctor,
+                    new SimpleDateFormat("dd.MM.yyyy").parse(startDate), Sort.by("schedule_date", "schedule_startTime")).
+                    stream().map(appointmentMapping::mapToAppointment).collect(Collectors.toList());
+
+        return appointmentRepository.findByIsActiveTrueAndScheduleDoctorIdAndScheduleDateBetween(idDoctor,
+                new SimpleDateFormat("dd.MM.yyyy").parse(startDate),
+                new SimpleDateFormat("dd.MM.yyyy").parse(endDate), Sort.by("schedule_date", "schedule_startTime")).
+                stream().map(appointmentMapping::mapToAppointment).collect(Collectors.toList());
     }
 
     @Operation(summary = "Просмотр данных конкретной записи")

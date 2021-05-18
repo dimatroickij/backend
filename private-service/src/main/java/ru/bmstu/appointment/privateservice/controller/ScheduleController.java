@@ -88,35 +88,35 @@ public class ScheduleController {
 
     private List<Schedule> filterSchedule(UUID idDoctor, String startDate, String endDate) throws ParseException {
         if (idDoctor == null && startDate == null && endDate == null)
-            return scheduleRepository.findAll(Sort.by("date", "startTime"));
+            return scheduleRepository.findByIsActiveTrue(Sort.by("date", "startTime"));
 
         if (idDoctor == null && startDate == null)
-            return scheduleRepository.findByDateBefore(new SimpleDateFormat("dd.MM.yyyy").parse(endDate),
-                    Sort.by("date", "startTime"));
+            return scheduleRepository.findByIsActiveTrueAndDateBefore(new SimpleDateFormat("dd.MM.yyyy")
+                    .parse(endDate), Sort.by("date", "startTime"));
 
         if (idDoctor == null && endDate == null)
-            return scheduleRepository.findByDateAfter(new SimpleDateFormat("dd.MM.yyyy").parse(startDate),
-                    Sort.by("date", "startTime"));
+            return scheduleRepository.findByIsActiveTrueAndDateAfter(new SimpleDateFormat("dd.MM.yyyy")
+                    .parse(startDate), Sort.by("date", "startTime"));
 
         if (idDoctor == null)
-            return scheduleRepository.findByDateBetween(new SimpleDateFormat("dd.MM.yyyy").parse(startDate),
-                    new SimpleDateFormat("dd.MM.yyyy").parse(endDate),
+            return scheduleRepository.findByIsActiveTrueAndDateBetween(new SimpleDateFormat("dd.MM.yyyy")
+                            .parse(startDate), new SimpleDateFormat("dd.MM.yyyy").parse(endDate),
                     Sort.by("date", "startTime"));
 
         Doctor doctor = doctorRepository.getOne(idDoctor);
 
         if (startDate == null && endDate == null)
-            return scheduleRepository.findByDoctor(doctor, Sort.by("date", "startTime"));
+            return scheduleRepository.findByIsActiveTrueAndDoctor(doctor, Sort.by("date", "startTime"));
 
         if (startDate == null)
-            return scheduleRepository.findByDoctorAndDateBefore(doctor,
+            return scheduleRepository.findByIsActiveTrueAndDoctorAndDateBefore(doctor,
                     new SimpleDateFormat("dd.MM.yyyy").parse(endDate), Sort.by("date", "startTime"));
 
         if (endDate == null)
-            return scheduleRepository.findByDoctorAndDateAfter(doctor,
+            return scheduleRepository.findByIsActiveTrueAndDoctorAndDateAfter(doctor,
                     new SimpleDateFormat("dd.MM.yyyy").parse(startDate), Sort.by("date", "startTime"));
 
-        return scheduleRepository.findByDoctorAndDateBetween(doctor,
+        return scheduleRepository.findByIsActiveTrueAndDoctorAndDateBetween(doctor,
                 new SimpleDateFormat("dd.MM.yyyy").parse(startDate),
                 new SimpleDateFormat("dd.MM.yyyy").parse(endDate), Sort.by("date", "startTime"));
     }

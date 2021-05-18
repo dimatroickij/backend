@@ -15,19 +15,22 @@ import java.util.stream.Collectors;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, UUID> {
-    List<Schedule> findByDoctorAndDateBetween(@NotNull Doctor doctor, @NotNull Date date, @NotNull Date date2, Sort sort);
 
-    List<Schedule> findByDateBetween(@NotNull Date date, @NotNull Date date2, Sort sort);
+    List<Schedule> findByIsActiveTrue(Sort sort);
+    List<Schedule> findByIsActiveTrueAndDoctorAndDateBetween(@NotNull Doctor doctor, @NotNull Date date,
+                                                             @NotNull Date date2, Sort sort);
 
-    List<Schedule> findByDateBefore(@NotNull Date date, Sort sort);
+    List<Schedule> findByIsActiveTrueAndDateBetween(@NotNull Date date, @NotNull Date date2, Sort sort);
 
-    List<Schedule> findByDateAfter(@NotNull Date date, Sort sort);
+    List<Schedule> findByIsActiveTrueAndDateBefore(@NotNull Date date, Sort sort);
 
-    List<Schedule> findByDoctorAndDateBefore(@NotNull Doctor doctor, @NotNull Date date, Sort sort);
+    List<Schedule> findByIsActiveTrueAndDateAfter(@NotNull Date date, Sort sort);
 
-    List<Schedule> findByDoctorAndDateAfter(@NotNull Doctor doctor, @NotNull Date date, Sort sort);
+    List<Schedule> findByIsActiveTrueAndDoctorAndDateBefore(@NotNull Doctor doctor, @NotNull Date date, Sort sort);
 
-    List<Schedule> findByDoctor(@NotNull Doctor doctor, Sort sort);
+    List<Schedule> findByIsActiveTrueAndDoctorAndDateAfter(@NotNull Doctor doctor, @NotNull Date date, Sort sort);
+
+    List<Schedule> findByIsActiveTrueAndDoctor(@NotNull Doctor doctor, Sort sort);
 
     default List<Schedule> findByAppointmentsEmpty(List<Schedule> schedules) {
         return schedules.stream().filter(item -> item.getAppointments().stream().noneMatch(Appointment::getIsActive))

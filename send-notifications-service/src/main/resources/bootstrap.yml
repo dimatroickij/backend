@@ -1,5 +1,7 @@
 server:
   port: ${SERVER_PORT:8083}
+  servlet:
+    context-path: ${SERVER_SERVLET_CONTEXT_PATH:/}
 
 spring:
   application:

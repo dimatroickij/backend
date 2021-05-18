@@ -24,6 +24,8 @@ spec:
           value: "${SERVER_PORT}"
         - name: SERVER_PORT
           value: "${SERVER_PORT}"
+        - name: SERVER_SERVLET_CONTEXT_PATH
+          value: "${PATH_PREFIX}${SERVICE_NAME}"
         - name: CONFIG_USER
           value: "${CONFIG_USER}"
         - name: CONFIG_PASS
@@ -34,12 +36,8 @@ spec:
           value: "${POSTGRES_USER}"
         - name: POSTGRES_PASSWORD
           value: "${POSTGRES_PASSWORD}"
-        - name: EMAIL_USERNAME
-          value: "${EMAIL_USERNAME}"
-        - name: EMAIL_PASSWORD
-          value: "${EMAIL_PASSWORD}"
-        - name: EMAIL_SEND_TO
-          value: "${EMAIL_SEND_TO}"
+        - name: SEND_EMAIL
+          value: "${SEND_EMAIL}"
         - name: KAFKA_SERVER_URL
           value: "${KAFKA_SERVER_URL}"
         - name: DEF_JAVA_OPTIONS
@@ -76,12 +74,11 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-busy-buffers: "64k"
     nginx.ingress.kubernetes.io/fastcgi-buffer-size: "32k"
     nginx.ingress.kubernetes.io/fastcgi-buffers: "4"
-    nginx.ingress.kubernetes.io/rewrite-target: ${REWRITE_TARGET}
 spec:
   rules:
   - http:
       paths:
-      - path: ${PATH_PREFIX}${SERVICE_NAME}/?(.*)
+      - path: ${PATH_PREFIX}${SERVICE_NAME}/
         pathType: Prefix
         backend:
           serviceName: ${SERVICE_NAME}

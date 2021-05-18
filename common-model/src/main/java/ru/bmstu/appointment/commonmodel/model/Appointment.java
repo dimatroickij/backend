@@ -28,7 +28,7 @@ public class Appointment {
     @NotNull
     private Pacient pacient = new Pacient();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @NotNull
     private Schedule schedule = new Schedule();
 

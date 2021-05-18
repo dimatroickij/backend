@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -45,4 +46,7 @@ public class Schedule {
     @Column(nullable = false)
     @ColumnDefault("true")
     private Boolean isActive;
+
+    @OneToMany(mappedBy = "schedule", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Appointment> appointments;
 }

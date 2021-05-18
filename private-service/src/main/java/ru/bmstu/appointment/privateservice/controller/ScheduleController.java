@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import ru.bmstu.appointment.commonmodel.dto.ScheduleRequest;
 import ru.bmstu.appointment.commonmodel.dto.ScheduleResponse;
@@ -49,10 +50,75 @@ public class ScheduleController {
     private JwtProvider jwtProvider;
 
     @SecurityRequirements
-    @Operation(summary = "Расписание врачей в зависимости от заданных фильтров")
+    @Operation(summary = "Расписание врачей в зависимости от заданных фильтров",
+            description = "Для получения расписания на определенный день заполните startDate и endDate этой датой")
     @GetMapping("/all")
-    public List<ScheduleResponse> all() {
-        return scheduleRepository.findAll().stream().map(scheduleMapping::mapToSchedule).collect(Collectors.toList());
+    public List<ScheduleResponse> all(@RequestParam(required = false) UUID idDoctor,
+                                      @RequestParam(required = false)
+                                      @Schema(type = "string",
+                                              pattern = "^(0[1-9]|[12][0-9]|3[01])\\.(0[1-9]|1[012]).\\d{4}$",
+                                              example = "dd.MM.yyyy") String startDate,
+                                      @RequestParam(required = false)
+                                      @Schema(type = "string",
+                                              pattern = "^(0[1-9]|[12][0-9]|3[01])\\.(0[1-9]|1[012]).\\d{4}$",
+                                              example = "dd.MM.yyyy") String endDate) throws ParseException {
+
+        return filterSchedule(idDoctor, startDate, endDate).stream().map(scheduleMapping::mapToSchedule)
+                .collect(Collectors.toList());
+    }
+
+    @SecurityRequirements
+    @Operation(summary = "Свободное время для записи к врачу в зависимости от заданных фильтров",
+            description = "Для получения свободных временных слотов на определенный день" +
+                    " заполните startDate и endDate этой датой")
+    @GetMapping("/free")
+    public List<ScheduleResponse> freeSchedule(@RequestParam(required = false) UUID idDoctor,
+                                               @RequestParam(required = false)
+                                               @Schema(type = "string",
+                                                       pattern = "^(0[1-9]|[12][0-9]|3[01])\\.(0[1-9]|1[012]).\\d{4}$",
+                                                       example = "dd.MM.yyyy") String startDate,
+                                               @RequestParam(required = false)
+                                               @Schema(type = "string",
+                                                       pattern = "^(0[1-9]|[12][0-9]|3[01])\\.(0[1-9]|1[012]).\\d{4}$",
+                                                       example = "dd.MM.yyyy") String endDate) throws ParseException {
+
+        return scheduleRepository.findByAppointmentsEmpty(filterSchedule(idDoctor, startDate, endDate)).stream().
+                map(scheduleMapping::mapToSchedule).collect(Collectors.toList());
+    }
+
+    private List<Schedule> filterSchedule(UUID idDoctor, String startDate, String endDate) throws ParseException {
+        if (idDoctor == null && startDate == null && endDate == null)
+            return scheduleRepository.findAll(Sort.by("date", "startTime"));
+
+        if (idDoctor == null && startDate == null)
+            return scheduleRepository.findByDateBefore(new SimpleDateFormat("dd.MM.yyyy").parse(endDate),
+                    Sort.by("date", "startTime"));
+
+        if (idDoctor == null && endDate == null)
+            return scheduleRepository.findByDateAfter(new SimpleDateFormat("dd.MM.yyyy").parse(startDate),
+                    Sort.by("date", "startTime"));
+
+        if (idDoctor == null)
+            return scheduleRepository.findByDateBetween(new SimpleDateFormat("dd.MM.yyyy").parse(startDate),
+                    new SimpleDateFormat("dd.MM.yyyy").parse(endDate),
+                    Sort.by("date", "startTime"));
+
+        Doctor doctor = doctorRepository.getOne(idDoctor);
+
+        if (startDate == null && endDate == null)
+            return scheduleRepository.findByDoctor(doctor, Sort.by("date", "startTime"));
+
+        if (startDate == null)
+            return scheduleRepository.findByDoctorAndDateBefore(doctor,
+                    new SimpleDateFormat("dd.MM.yyyy").parse(endDate), Sort.by("date", "startTime"));
+
+        if (endDate == null)
+            return scheduleRepository.findByDoctorAndDateAfter(doctor,
+                    new SimpleDateFormat("dd.MM.yyyy").parse(startDate), Sort.by("date", "startTime"));
+
+        return scheduleRepository.findByDoctorAndDateBetween(doctor,
+                new SimpleDateFormat("dd.MM.yyyy").parse(startDate),
+                new SimpleDateFormat("dd.MM.yyyy").parse(endDate), Sort.by("date", "startTime"));
     }
 
     @SecurityRequirements
@@ -69,7 +135,9 @@ public class ScheduleController {
         return null;
     }
 
-    @Operation(summary = "Добавление записи в расписание", description = "Доступно для пользователей с ролью DOCTOR или ADMIN. Если запись добавляет врач, то поле ID врача будет заполнено автоматически")
+    @Operation(summary = "Добавление записи в расписание",
+            description = "Доступно для пользователей с ролью DOCTOR или ADMIN. Если запись добавляет врач, " +
+                    "то поле ID врача будет заполнено автоматически")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Запись добавлена",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ScheduleResponse.class))})})
@@ -92,6 +160,7 @@ public class ScheduleController {
         schedule.setDate(new SimpleDateFormat("dd.MM.yyyy").parse(request.getDate()));
         schedule.setStartTime(new SimpleDateFormat("HH:mm").parse(request.getStartTime()));
         schedule.setEndTime(new SimpleDateFormat("HH:mm").parse(request.getEndTime()));
+        schedule.setIsActive(true);
         scheduleRepository.save(schedule);
         return scheduleMapping.mapToSchedule(schedule);
     }

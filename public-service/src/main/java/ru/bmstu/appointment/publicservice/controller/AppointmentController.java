@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.apache.kafka.common.protocol.types.Field;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -21,14 +21,19 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.bmstu.appointment.commonmodel.dto.AppointmentUpdateRequest;
+import ru.bmstu.appointment.commonmodel.dto.ExceptionResponse;
 import ru.bmstu.appointment.commonmodel.model.Appointment;
 import ru.bmstu.appointment.commonmodel.dto.AppointmentRequest;
 import ru.bmstu.appointment.commonmodel.dto.AppointmentResponse;
 import ru.bmstu.appointment.commonmodel.model.Pacient;
+import ru.bmstu.appointment.commonmodel.model.Schedule;
 import ru.bmstu.appointment.commonmodel.repository.AppointmentRepository;
 import ru.bmstu.appointment.commonmodel.repository.PacientRepository;
 import ru.bmstu.appointment.commonmodel.repository.ScheduleRepository;
 import ru.bmstu.appointment.commonmodel.utils.AppointmentMapping;
+import ru.bmstu.appointment.publicservice.exception.ActiveAppointmentException;
+import ru.bmstu.appointment.publicservice.exception.InvalidAppointmentException;
+import ru.bmstu.appointment.publicservice.exception.NotFoundPacientException;
 import ru.bmstu.appointment.publicservice.component.NotificationProducer;
 
 import javax.validation.Valid;
@@ -39,7 +44,6 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -72,7 +76,8 @@ public class AppointmentController {
     @Operation(summary = "Список записей")
     @GetMapping("/all")
     public List<AppointmentResponse> all() {
-        return appointmentRepository.findAll().stream().map(appointmentMapping::mapToAppointment).collect(Collectors.toList());
+        return appointmentRepository.findAll().stream().map(appointmentMapping::mapToAppointment)
+                .collect(Collectors.toList());
     }
 
     @Operation(summary = "Просмотр данных конкретной записи")
@@ -88,8 +93,6 @@ public class AppointmentController {
     }
 
     @Operation(summary = "Генерация талона записи")
-//    @ApiResponses(value = {@ApiResponse(responseCode = "200", content = {@Content(mediaType = "application/json",
-//            schema = @Schema(implementation = AppointmentResponse.class))})})
     @GetMapping("/{id}.pdf")
     public ResponseEntity<InputStreamResource> print(@PathVariable UUID id) throws DocumentException, IOException {
         if (appointmentRepository.existsById(id)) {
@@ -99,7 +102,8 @@ public class AppointmentController {
             headers.setContentType(MediaType.parseMediaType("application/pdf"));
 
             return new ResponseEntity<InputStreamResource>(
-                    new InputStreamResource(getPDF(new AppointmentMapping().mapToAppointment(appointment))), headers, HttpStatus.OK);
+                    new InputStreamResource(getPDF(new AppointmentMapping().mapToAppointment(appointment))), headers,
+                    HttpStatus.OK);
         }
         return null;
     }
@@ -107,10 +111,27 @@ public class AppointmentController {
     @Operation(summary = "Создание записи на приём к врачу")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Запись создана",
             content = {@Content(mediaType = "application/json",
-                    schema = @Schema(implementation = AppointmentResponse.class))})})
+                    schema = @Schema(implementation = AppointmentResponse.class))}),
+            @ApiResponse(responseCode = "404", description = "Пациент или расписание не найдено",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionResponse.class))}),
+            @ApiResponse(responseCode = "409", description = "Запись уже занята",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionResponse.class))})})
     @PostMapping("/add")
-    public AppointmentResponse add(@RequestBody @Valid AppointmentRequest request) throws ParseException {
+    public AppointmentResponse add(@RequestBody @Valid AppointmentRequest request) throws ParseException,
+            ActiveAppointmentException, NotFoundPacientException {
+
         Appointment appointment = new Appointment();
+        Schedule schedule = scheduleRepository.getOne(request.getSchedule());
+        List<Appointment> activeAppointment = schedule.getAppointments().stream().filter(Appointment::getIsActive).
+                collect(Collectors.toList());
+
+        if (!activeAppointment.isEmpty())
+            throw new ActiveAppointmentException("Запись на " + activeAppointment.get(0).getSchedule().getDate() +
+                    " " + activeAppointment.get(0).getSchedule().getStartTime() + " уже занята. " +
+                    "Выберите другое время.");
+
         appointment.setSchedule(scheduleRepository.getOne(request.getSchedule()));
         appointment.setDateRecord(new Date());
 
@@ -118,7 +139,8 @@ public class AppointmentController {
                 request.getName(), request.getMiddleName(),
                 new SimpleDateFormat("dd.MM.yyyy").parse(request.getBirthDay()), request.getPolicy())) {
 
-            Pacient pacient = pacientRepository.findBySurNameAndNameAndMiddleNameAndBirthDayAndPolicy(request.getSurName(),
+            Pacient pacient = pacientRepository.findBySurNameAndNameAndMiddleNameAndBirthDayAndPolicy(
+                    request.getSurName(),
                     request.getName(), request.getMiddleName(),
                     new SimpleDateFormat("dd.MM.yyyy").parse(request.getBirthDay()),
                     request.getPolicy());
@@ -127,24 +149,49 @@ public class AppointmentController {
             appointmentRepository.save(appointment);
 
             if (sendEmail)
-                notificationProducer.sendMessageWithCallback(request.getEmail() + "###" + appointment.getId().toString());
+                notificationProducer.sendMessageWithCallback(request.getEmail() + "###" +
+                        appointment.getId().toString());
             return appointmentMapping.mapToAppointment(appointment);
         }
-        return null;
+        throw new NotFoundPacientException("Пациент не найден. Убедитесь, что введены корретные данные " +
+                "или прикрепитесь к поликлинике");
     }
 
     @Operation(summary = "Изменение записи на приём к врачу")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Данные записи изменены",
             content = {@Content(mediaType = "application/json",
-                    schema = @Schema(implementation = AppointmentResponse.class))})})
+                    schema = @Schema(implementation = AppointmentResponse.class))}),
+            @ApiResponse(responseCode = "304", description = "Запись недействительна",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionResponse.class))}),
+            @ApiResponse(responseCode = "404", description = "Расписание не найдено",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionResponse.class))}),
+            @ApiResponse(responseCode = "409", description = "Запись уже занята",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionResponse.class))})})
     @PutMapping("/update/{id}")
-    public AppointmentResponse update(@RequestBody @Valid AppointmentUpdateRequest request, @PathVariable UUID id) {
+    public AppointmentResponse update(@RequestBody @Valid AppointmentUpdateRequest request, @PathVariable UUID id)
+            throws NotFoundException, InvalidAppointmentException {
         if (appointmentRepository.existsById(id)) {
             Appointment lastAppointment = appointmentRepository.getOne(id);
+            if (!lastAppointment.getIsActive())
+                throw new InvalidAppointmentException("Запись " + lastAppointment.getId() + " отменена.");
+
             lastAppointment.setIsActive(false);
             appointmentRepository.save(lastAppointment);
 
             Appointment appointment = new Appointment();
+
+            Schedule schedule = scheduleRepository.getOne(request.getSchedule());
+            List<Appointment> activeAppointment = schedule.getAppointments().stream().filter(Appointment::getIsActive).
+                    collect(Collectors.toList());
+
+            if (!activeAppointment.isEmpty())
+                throw new ActiveAppointmentException("Запись на " + activeAppointment.get(0).getSchedule().getDate() +
+                        " " + activeAppointment.get(0).getSchedule().getStartTime() + " уже занята. " +
+                        "Выберите другое время.");
+
             appointment.setPacient(lastAppointment.getPacient());
             appointment.setSchedule(scheduleRepository.getOne(request.getSchedule()));
             appointment.setDateRecord(new Date());
@@ -152,10 +199,11 @@ public class AppointmentController {
             appointmentRepository.save(appointment);
 
             if (sendEmail)
-                notificationProducer.sendMessageWithCallback(request.getEmail() + "###" + appointment.getId().toString());
+                notificationProducer.sendMessageWithCallback(request.getEmail() + "###" +
+                        appointment.getId().toString());
             return appointmentMapping.mapToAppointment(appointment);
         }
-        return null;
+        throw new NotFoundException("Запись не найдена. Убедитесь, что введены корретные данные");
     }
 
     @Operation(summary = "Удаление записи на приём к врачу")
@@ -186,7 +234,8 @@ public class AppointmentController {
         BaseFont bfBold = BaseFont.createFont("/OpenSans-Bold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         Font fontBold = new Font(bfBold);
 
-        BaseFont bfExtraBold = BaseFont.createFont("/OpenSans-ExtraBold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        BaseFont bfExtraBold = BaseFont.createFont("/OpenSans-ExtraBold.ttf", BaseFont.IDENTITY_H,
+                BaseFont.EMBEDDED);
         Font fontExtraBold = new Font(bfExtraBold);
 
         // Адрес поликлиники

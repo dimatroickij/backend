@@ -24,4 +24,8 @@ public class AuthResponse {
     @NotBlank
     @Schema(description = "Роль пользователя")
     private Role role;
+
+    @Schema(description = "ID доктора, если авторизован пользователь с ролю ROLE_DOCTOR. " +
+            "Если другие роли, то поле пустое.")
+    private DoctorResponse doctor;
 }

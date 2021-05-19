@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -39,9 +40,13 @@ public class User{
     private String password;
 
     @ManyToOne
+    @NotNull
     private Role role = new Role();
 
     @Column(nullable = false)
     @ColumnDefault("true")
     private Boolean isActive;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Doctor> doctors;
 }

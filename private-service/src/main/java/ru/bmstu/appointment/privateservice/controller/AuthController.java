@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import ru.bmstu.appointment.commonmodel.utils.DoctorMapping;
 import ru.bmstu.appointment.privateservice.config.jwt.JwtProvider;
 import ru.bmstu.appointment.commonmodel.dto.AuthRequest;
 import ru.bmstu.appointment.commonmodel.dto.AuthResponse;
@@ -29,6 +30,9 @@ public class AuthController {
     private UserService userService;
     @Autowired
     private JwtProvider jwtProvider;
+
+    @Autowired
+    private DoctorMapping doctorMapping;
 
     @SecurityRequirements
     @Operation(summary = "Регистрация в системе",
@@ -61,6 +65,9 @@ public class AuthController {
     public AuthResponse auth(@RequestBody AuthRequest request) {
         User user = userService.findByUsernameAndPassword(request.getUsername(), request.getPassword());
         String token = jwtProvider.generateToken(user.getUsername());
-        return new AuthResponse(token, user.getUsername(), user.getRole());
+        if (user.getRole().getName().equals("ROLE_DOCTOR"))
+            return new AuthResponse(token, user.getUsername(), user.getRole(),
+                doctorMapping.mapToDoctor(user.getDoctors().get(0)));
+        return new AuthResponse(token, user.getUsername(), user.getRole(), null);
     }
 }

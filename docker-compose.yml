@@ -1,6 +1,24 @@
 version: '3.4'
 
 services:
+
+  vault:
+    image: vault
+    container_name: vault
+    restart: unless-stopped
+    ports:
+      - 8200:8200
+    volumes:
+      - ./file:/vault/file:rw
+      - ./config:/vault/config:rw
+      - ./vault:/vault/secrets:rw
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: 00000000-0000-0000-0000-000000000000
+      VAULT_TOKEN: 00000000-0000-0000-0000-000000000000
+      VAULT_ADDR: http://127.0.0.1:8200
+    cap_add:
+      - IPC_LOCK
+
   db-postgres:
     image: postgres:9.6-alpine
     container_name: db-postgres
@@ -8,9 +26,9 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_DB: "${POSTGRES_DB}"
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: appointment
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
 
   zookeeper:
     image: zookeeper #wurstmeister/zookeeper:3.4.14
@@ -51,12 +69,10 @@ services:
     container_name: config-service
     environment:
       CONFIG_URL: "${CONFIG_URL}"
-      CONFIG_SERVICE_PASS: "${CONFIG_SERVICE_PASS}"
-      CONFIG_SERVICE_USER: "${CONFIG_SERVICE_USER}"
-      DEF_JAVA_OPTIONS: "${DEF_JAVA_OPTIONS}"
     ports:
       - 8888:8888
     depends_on:
+      - vault
       - db-postgres
 
   display-service:
@@ -67,13 +83,11 @@ services:
     container_name: display-service
     environment:
       CONFIG_URL: "${CONFIG_URL}"
-      CONFIG_SERVICE_PASS: "${CONFIG_SERVICE_PASS}"
-      CONFIG_SERVICE_USER: "${CONFIG_SERVICE_USER}"
-      DEF_JAVA_OPTIONS: "${DEF_JAVA_OPTIONS}"
     ports:
       - 8082:8082
     depends_on:
       - db-postgres
+      - vault
       - config-service
 
   private-service:
@@ -84,13 +98,11 @@ services:
     container_name: private-service
     environment:
       CONFIG_URL: "${CONFIG_URL}"
-      CONFIG_SERVICE_PASS: "${CONFIG_SERVICE_PASS}"
-      CONFIG_SERVICE_USER: "${CONFIG_SERVICE_USER}"
-      DEF_JAVA_OPTIONS: "${DEF_JAVA_OPTIONS}"
     ports:
       - 8080:8080
     depends_on:
       - db-postgres
+      - vault
       - config-service
 
   public-service:
@@ -101,13 +113,11 @@ services:
     container_name: public-service
     environment:
       CONFIG_URL: "${CONFIG_URL}"
-      CONFIG_SERVICE_PASS: "${CONFIG_SERVICE_PASS}"
-      CONFIG_SERVICE_USER: "${CONFIG_SERVICE_USER}"
-      DEF_JAVA_OPTIONS: "${DEF_JAVA_OPTIONS}"
     ports:
       - 8081:8081
     depends_on:
       - db-postgres
+      - vault
       - config-service
       - kafka
 
@@ -119,12 +129,10 @@ services:
     container_name: send-notifications-service
     environment:
       CONFIG_URL: "${CONFIG_URL}"
-      CONFIG_SERVICE_PASS: "${CONFIG_SERVICE_PASS}"
-      CONFIG_SERVICE_USER: "${CONFIG_SERVICE_USER}"
-      DEF_JAVA_OPTIONS: "${DEF_JAVA_OPTIONS}"
     ports:
       - 8083:8083
     depends_on:
       - db-postgres
+      - vault
       - config-service
       - kafka

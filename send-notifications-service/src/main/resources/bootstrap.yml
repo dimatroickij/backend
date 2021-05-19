@@ -9,9 +9,7 @@ spring:
   cloud:
     config:
       fail-fast: true
-      uri: http://${CONFIG_HOST:127.0.0.1}:${CONFIG_PORT:8888}
-      username: ${CONFIG_USER:user}
-      password: ${CONFIG_PASS:config_pass}
+      uri: ${CONFIG_URL:http://127.0.0.1:8888}
       retry:
         max-attempts: 10
         max-interval: 10000

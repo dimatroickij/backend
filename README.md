@@ -9,6 +9,17 @@
 ##Запуск приложения для разработки и тестирования
 1. Выполнить mvn clean package -DskipTests
 2. Запустить все приложение через docker-compose -f docker-compose.yml либо создать конфигурацию в Inteliji IDEA
+3. В терминале ввести последовательно команды. Терминал должен быть запущен от корневой папки репозитория:
+```bash
+docker-compose exec vault sh
+vault kv put secret/config-service @vault/secrets/config-service.json
+vault kv put secret/send-notifications-service @vault/secrets/send-notifications-service.json
+vault kv put secret/display-service @vault/secrets/display-service.json
+vault kv put secret/public-service @vault/secrets/public-service.json
+vault kv put secret/private-service @vault/secrets/private-service.json
+exit
+```
+4. Закрыть терминал
 
 ## Рекомендации
 1. При создании записи приёма к врачу внимательно заполняйте значения полей пациента, так как производится поиск на 

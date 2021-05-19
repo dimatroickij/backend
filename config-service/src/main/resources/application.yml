@@ -1,20 +1,18 @@
-#logging:
-#    file:
-#      name: logs/config-service.log
 server:
   port: ${SERVER_PORT:8888}
 
 spring:
   application:
     name: config-service
+  profiles:
+    active: vault
   cloud:
     config:
       server:
-        native:
-          search-locations: classpath:/shared
-  profiles:
-    active: native
-  security:
-    user:
-      name: ${CONFIG_USER:user}
-      password: ${CONFIG_PASS:config_pass}
+        vault:
+          host: ${VAULT_HOST:127.0.0.1}
+          port: ${VAULT_PORT:8200}
+          scheme: http
+          authentication: TOKEN
+          token: ${VAULT_TOKEN:00000000-0000-0000-0000-000000000000}
+          kvVersion: 2

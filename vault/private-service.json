@@ -1,0 +1,20 @@
+{
+  "server.port": "8080",
+  "spring.datasource.continue-on-error": "false",
+  "spring.datasource.hikari.driver-class-name": "org.postgresql.Driver",
+  "spring.datasource.hikari.jdbc-url": "jdbc:postgresql://db-postgres/appointment",
+  "spring.datasource.hikari.maximum-pool-size": "4",
+  "spring.datasource.hikari.minimum-idle": "1",
+  "spring.datasource.hikari.password": "postgres",
+  "spring.datasource.hikari.username": "postgres",
+  "spring.datasource.initialization-mode": "always",
+  "spring.datasource.url": "jdbc:postgresql://db-postgres/appointment",
+  "spring.jpa.hibernate.ddl-auto": "none",
+  "spring.jpa.hibernate.enable_lazy_load_no_trans": "true",
+  "spring.jpa.hibernate.validator.apply_to_ddl": "true",
+  "spring.jpa.show-sql": "true",
+  "spring.liquibase.change-log": "classpath:db/changelog/db.changelog-master.yaml",
+  "spring.liquibase.default-schema": "liquibase_db",
+  "springdoc.api-docs.path": "/openapi.json",
+  "springdoc.swagger-ui.path": "/openapi.html"
+}

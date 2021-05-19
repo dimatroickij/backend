@@ -1,0 +1,17 @@
+{
+  "server.port": "8082",
+  "spring.datasource.continue-on-error": "false",
+  "spring.datasource.hikari.driver-class-name": "org.postgresql.Driver",
+  "spring.datasource.hikari.jdbc-url": "jdbc:postgresql://db-postgres/appointment",
+  "spring.datasource.hikari.maximum-pool-size": "4",
+  "spring.datasource.hikari.minimum-idle": "1",
+  "spring.datasource.hikari.password": "postgres",
+  "spring.datasource.hikari.username": "postgres",
+  "spring.datasource.initialization-mode": "always",
+  "spring.datasource.url": "jdbc:postgresql://db-postgres/appointment",
+  "spring.jpa.hibernate.ddl-auto": "none",
+  "spring.jpa.hibernate.validator.apply_to_ddl": "true",
+  "spring.jpa.show-sql": "true",
+  "springdoc.api-docs.path": "/openapi.json",
+  "springdoc.swagger-ui.path": "/openapi.html"
+}
